@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="Premium financial calculators for investing, retirement, trading risk and loans. Install as app on mobile and desktop.">
+    
+    <title>Financial Calculators - Premium Investing Tools</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiRmluYW5jaWFsIENhbGN1bGF0b3JzIiwic2hvcnRfbmFtZSI6IkZpbkNhbGMiLCJzdGFydF91cmwiOiIuIiwiZGlzcGxheSI6InN0YW5kYWxvbmUiLCJiYWNrZ3JvdW5kX2NvbG9yIjoiIzBmMTcyYSIsInRoZW1lX2NvbG9yIjoiIzBmMTcyYSIsImljb25zIjpbeyJzcmMiOiJkYXRhOmltYWdlL3N2Zyt4bWw7YmFzZTY0LFBITjJaeUI0Yld4dWN6MGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TUM5aGRYUm9JaUI0Yld4dWN6MGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TUM5aGRYUm9JaUJtYVd4c1BTSjNjbWwwWlNJZ2FXMWhaMlZ1ZEQwaVgyNWhiV1VpSUdadmJuUXRZMjl1ZEdGamRFMXBibWRmYm1GdFpUMGlWMlZpUzJWNUlpQnBibWwwYVdGMGIzSTlJbDltYVd4bFgyNWhiV1VpSUhkcGJuUmZkSGx3WlQwaVgyOWpheUkrUEM5M1pYdyIsInNpemVzIjoiMTkyeDE5MiIsInR5cGUiOiJpbWFnZS9zdmcreG1sIn1dfQ==">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            900: '#0f172a',
+                            800: '#1e293b',
+                            700: '#334155',
+                            600: '#475569'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        * {
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #0f172a;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+        
+        /* Prevent pull-to-refresh on mobile */
+        body {
+            overscroll-behavior-y: none;
+        }
+        
+        .calculator-card { 
+            transition: all 0.3s ease; 
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .calculator-card:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 20px 50px -10px rgba(0,0,0,0.5);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+        
+        .input-field { 
+            transition: all 0.2s; 
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            color: #e2e8f0;
+        }
+        
+        .input-field:focus { 
+            transform: scale(1.01); 
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+            outline: none;
+        }
+        
+        .input-field::placeholder {
+            color: #64748b;
+        }
+        
+        .result-card { 
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            box-shadow: 0 10px 40px -10px rgba(79, 70, 229, 0.4);
+        }
+        
+        .gradient-text { 
+            background: linear-gradient(135deg, #818cf8 0%, #c084fc 100%); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+        }
+        
+        .tab-active { 
+            border-bottom: 2px solid #6366f1; 
+            color: #818cf8; 
+        }
+        
+        .smooth-fade { 
+            animation: fadeIn 0.5s ease-in; 
+        }
+        
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: translateY(10px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+        
+        /* Modal styles */
+        .modal-backdrop {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+        }
+        
+        /* Mobile optimizations */
+        @media (max-width: 640px) {
+            .calculator-card {
+                margin: 0 -0.5rem;
+                border-radius: 1rem;
+            }
+            
+            input[type="range"] {
+                height: 6px;
+            }
+        }
+        
+        /* Safe area for iOS notch */
+        .safe-top {
+            padding-top: env(safe-area-inset-top);
+        }
+        
+        .safe-bottom {
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        
+        /* Install prompt animation */
+        @keyframes slideUp {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .install-prompt {
+            animation: slideUp 0.3s ease-out;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-200 antialiased">
+
+    <!-- Header -->
+    <header class="bg-slate-800/80 backdrop-blur-md border-b border-slate-700 sticky top-0 z-50 safe-top">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-indigo-500/20">
+                        ₹
+                    </div>
+                    <div>
+                        <h1 class="text-xl sm:text-2xl font-bold text-white tracking-tight">Financial Calculators</h1>
+                        <p class="text-xs sm:text-sm text-slate-400">Premium tools for smart investing</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button onclick="showInstallPrompt()" id="installBtn" class="hidden md:hidden bg-indigo-600 text-white px-3 py-1.5 rounded-lg text-sm font-medium hover:bg-indigo-700 transition">
+                        Install
+                    </button>
+                    <button onclick="openAboutModal()" class="text-slate-400 hover:text-white transition p-2">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="bg-slate-800/50 border-b border-slate-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 text-center">
+            <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">Make Informed Financial Decisions</h2>
+            <p class="text-base sm:text-lg text-slate-400 max-w-3xl mx-auto px-4">Professional-grade calculators for investing, retirement planning, trading risk management, and loan analysis.</p>
+            
+            <!-- PWA Install Banner (Mobile) -->
+            <div id="mobileInstallBanner" class="hidden mt-6 sm:hidden">
+                <button onclick="showInstallPrompt()" class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-3 rounded-full font-semibold shadow-lg shadow-indigo-500/30 active:scale-95 transition transform">
+                    Install App
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Calculator Navigation -->
+    <div class="bg-slate-800/80 backdrop-blur-md sticky top-[73px] z-40 border-b border-slate-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex space-x-1 overflow-x-auto py-2 scrollbar-hide" id="calcTabs">
+                <button onclick="showCalculator('cagr')" class="calc-tab px-3 sm:px-4 py-2 text-sm font-medium text-slate-400 hover:text-indigo-400 whitespace-nowrap transition" data-calc="cagr">CAGR</button>
+                <button onclick="showCalculator('sip')" class="calc-tab px-3 sm:px-4 py-2 text-sm font-medium text-slate-400 hover:text-indigo-400 whitespace-nowrap transition" data-calc="sip">SIP</button>
+                <button onclick="showCalculator('lumpsum')" class="calc-tab px-3 sm:px-4 py-2 text-sm font-medium text-slate-400 hover:text-indigo-400 whitespace-nowrap transition" data-calc="lumpsum">Lumpsum</button>
+                <button onclick="showCalculator('goal-sip')" class="calc-tab px-3 sm:px-4 py-2 text-sm font-medium text-slate-400 hover:text-indigo-400 whitespace-nowrap transition" data-calc="goal-sip">Goal SIP</button>
+                <button onclick="showCalculator('goal-lumpsum')" class="calc-tab px-3 sm:px-4 py-2 text-sm font-medium text-slate-400 hover:text-indigo-400 whitespace-nowrap transition" data-calc="goal-lumpsum">Goal Lumpsum</button>
+                <button onclick="showCalculator('retirement')" class="calc-tab px-3 sm:px-4 py-2 text-sm font-medium text-slate-400 hover:text-indigo-400 whitespace-nowrap transition" data-calc="retirement">Retirement</button>
+                <button onclick="showCalculator('swp')" class="calc-tab px-3 sm:px-4 py-2 text-sm font-medium text-slate-400 hover:text-indigo-400 whitespace-nowrap transition" data-calc="swp">SWP</button>
+                <button onclick="showCalculator('position')" class="calc-tab px-3 sm:px-4 py-2 text-sm font-medium text-slate-400 hover:text-indigo-400 whitespace-nowrap transition" data-calc="position">Position</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 pb-24 safe-bottom" id="calculators">
+
+        <!-- CAGR Calculator -->
+        <div id="cagr-calc" class="calculator-section smooth-fade">
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="calculator-card rounded-2xl shadow-xl p-5 sm:p-6">
+                    <h3 class="text-xl sm:text-2xl font-bold mb-6 flex items-center text-white">
+                        <span class="w-8 h-8 bg-indigo-500/20 text-indigo-400 rounded-lg flex items-center justify-center mr-3 text-sm">1</span>
+                        CAGR Calculator
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Initial Investment (₹)</label>
+                            <input type="number" id="cagr-initial" class="input-field w-full px-4 py-3 rounded-lg" placeholder="100000" value="100000">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Final Value (₹)</label>
+                            <input type="number" id="cagr-final" class="input-field w-full px-4 py-3 rounded-lg" placeholder="200000" value="200000">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Duration (Years)</label>
+                            <input type="number" id="cagr-years" class="input-field w-full px-4 py-3 rounded-lg" placeholder="5" value="5">
+                        </div>
+                        <button onclick="calculateCAGR()" class="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition transform active:scale-95 shadow-lg shadow-indigo-600/20">Calculate CAGR</button>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div id="cagr-result" class="result-card rounded-2xl shadow-xl p-5 sm:p-6 text-white hidden">
+                        <h4 class="text-lg font-semibold mb-4 opacity-90">Results</h4>
+                        <div class="text-4xl font-bold mb-2" id="cagr-value">0%</div>
+                        <p class="text-indigo-200">Compound Annual Growth Rate</p>
+                        <div class="mt-4 pt-4 border-t border-white/20 grid grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-sm opacity-75">Total Return</p>
+                                <p class="text-xl font-semibold" id="cagr-return">₹0</p>
+                            </div>
+                            <div>
+                                <p class="text-sm opacity-75">Absolute Return</p>
+                                <p class="text-xl font-semibold" id="cagr-absolute">0%</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="calculator-card rounded-2xl shadow-lg p-5 sm:p-6">
+                        <h4 class="font-semibold mb-3 text-slate-200">What is CAGR?</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed">Compound Annual Growth Rate measures the mean annual growth rate of an investment over a specified time period. It represents one of the most accurate ways to calculate returns.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SIP Calculator -->
+        <div id="sip-calc" class="calculator-section hidden smooth-fade">
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="calculator-card rounded-2xl shadow-xl p-5 sm:p-6">
+                    <h3 class="text-xl sm:text-2xl font-bold mb-6 flex items-center text-white">
+                        <span class="w-8 h-8 bg-emerald-500/20 text-emerald-400 rounded-lg flex items-center justify-center mr-3 text-sm">2</span>
+                        SIP Calculator
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Monthly Investment (₹)</label>
+                            <input type="number" id="sip-amount" class="input-field w-full px-4 py-3 rounded-lg mb-2" placeholder="5000" value="5000" oninput="updateSlider('sip-amount', 'sip-amount-slider')">
+                            <input type="range" id="sip-amount-slider" class="w-full accent-emerald-500 h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer" min="500" max="100000" step="500" value="5000" oninput="updateInput('sip-amount', 'sip-amount-slider')">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Expected Return Rate (% p.a.)</label>
+                            <input type="number" id="sip-rate" class="input-field w-full px-4 py-3 rounded-lg mb-2" placeholder="12" value="12" oninput="updateSlider('sip-rate', 'sip-rate-slider')">
+                            <input type="range" id="sip-rate-slider" class="w-full accent-emerald-500 h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer" min="1" max="30" step="0.5" value="12" oninput="updateInput('sip-rate', 'sip-rate-slider')">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Time Period (Years)</label>
+                            <input type="number" id="sip-years" class="input-field w-full px-4 py-3 rounded-lg mb-2" placeholder="10" value="10" oninput="updateSlider('sip-years', 'sip-years-slider')">
+                            <input type="range" id="sip-years-slider" class="w-full accent-emerald-500 h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer" min="1" max="40" step="1" value="10" oninput="updateInput('sip-years', 'sip-years-slider')">
+                        </div>
+                        <button onclick="calculateSIP()" class="w-full bg-emerald-600 text-white py-3 rounded-lg font-semibold hover:bg-emerald-700 transition transform active:scale-95 shadow-lg shadow-emerald-600/20">Calculate SIP Returns</button>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div id="sip-result" class="bg-gradient-to-br from-emerald-600 to-teal-600 rounded-2xl shadow-xl p-5 sm:p-6 text-white hidden">
+                        <h4 class="text-lg font-semibold mb-4 opacity-90">Projected Returns</h4>
+                        <div class="text-3xl font-bold mb-1" id="sip-total">₹0</div>
+                        <p class="text-emerald-100 text-sm mb-4">Total Corpus</p>
+                        <div class="space-y-3">
+                            <div class="flex justify-between border-b border-white/20 pb-2">
+                                <span class="opacity-75">Invested Amount</span>
+                                <span class="font-semibold" id="sip-invested">₹0</span>
+                            </div>
+                            <div class="flex justify-between border-b border-white/20 pb-2">
+                                <span class="opacity-75">Est. Returns</span>
+                                <span class="font-semibold" id="sip-returns">₹0</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="opacity-75">Wealth Gain</span>
+                                <span class="font-semibold text-yellow-300" id="sip-gain">0%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="calculator-card rounded-2xl shadow-lg p-4">
+                        <canvas id="sipChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lumpsum Calculator -->
+        <div id="lumpsum-calc" class="calculator-section hidden smooth-fade">
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="calculator-card rounded-2xl shadow-xl p-5 sm:p-6">
+                    <h3 class="text-xl sm:text-2xl font-bold mb-6 flex items-center text-white">
+                        <span class="w-8 h-8 bg-purple-500/20 text-purple-400 rounded-lg flex items-center justify-center mr-3 text-sm">3</span>
+                        Lumpsum Calculator
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Investment Amount (₹)</label>
+                            <input type="number" id="lump-amount" class="input-field w-full px-4 py-3 rounded-lg" placeholder="100000" value="100000">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Expected Return Rate (% p.a.)</label>
+                            <input type="number" id="lump-rate" class="input-field w-full px-4 py-3 rounded-lg" placeholder="12" value="12">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Time Period (Years)</label>
+                            <input type="number" id="lump-years" class="input-field w-full px-4 py-3 rounded-lg" placeholder="10" value="10">
+                        </div>
+                        <button onclick="calculateLumpsum()" class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition transform active:scale-95 shadow-lg shadow-purple-600/20">Calculate Returns</button>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div id="lump-result" class="bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl shadow-xl p-5 sm:p-6 text-white hidden">
+                        <h4 class="text-lg font-semibold mb-4 opacity-90">Future Value</h4>
+                        <div class="text-3xl font-bold mb-1" id="lump-total">₹0</div>
+                        <p class="text-purple-100 text-sm mb-4">Total Corpus</p>
+                        <div class="space-y-3">
+                            <div class="flex justify-between border-b border-white/20 pb-2">
+                                <span class="opacity-75">Initial Investment</span>
+                                <span class="font-semibold" id="lump-invested">₹0</span>
+                            </div>
+                            <div class="flex justify-between border-b border-white/20 pb-2">
+                                <span class="opacity-75">Est. Returns</span>
+                                <span class="font-semibold" id="lump-returns">₹0</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="opacity-75">Multiplication</span>
+                                <span class="font-semibold text-yellow-300" id="lump-multiplier">0x</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="calculator-card rounded-2xl shadow-lg p-4">
+                        <canvas id="lumpChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Goal SIP Calculator -->
+        <div id="goal-sip-calc" class="calculator-section hidden smooth-fade">
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="calculator-card rounded-2xl shadow-xl p-5 sm:p-6">
+                    <h3 class="text-xl sm:text-2xl font-bold mb-6 flex items-center text-white">
+                        <span class="w-8 h-8 bg-orange-500/20 text-orange-400 rounded-lg flex items-center justify-center mr-3 text-sm">4</span>
+                        Goal-based SIP
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Target Amount (₹)</label>
+                            <input type="number" id="goal-sip-target" class="input-field w-full px-4 py-3 rounded-lg" placeholder="1000000" value="1000000">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Expected Return Rate (% p.a.)</label>
+                            <input type="number" id="goal-sip-rate" class="input-field w-full px-4 py-3 rounded-lg" placeholder="12" value="12">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Time Period (Years)</label>
+                            <input type="number" id="goal-sip-years" class="input-field w-full px-4 py-3 rounded-lg" placeholder="10" value="10">
+                        </div>
+                        <button onclick="calculateGoalSIP()" class="w-full bg-orange-600 text-white py-3 rounded-lg font-semibold hover:bg-orange-700 transition transform active:scale-95 shadow-lg shadow-orange-600/20">Calculate Required SIP</button>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div id="goal-sip-result" class="bg-gradient-to-br from-orange-600 to-red-600 rounded-2xl shadow-xl p-5 sm:p-6 text-white hidden">
+                        <h4 class="text-lg font-semibold mb-4 opacity-90">Required Monthly Investment</h4>
+                        <div class="text-3xl font-bold mb-1" id="goal-sip-amount">₹0</div>
+                        <p class="text-orange-100 text-sm mb-4">per month</p>
+                        <div class="space-y-3">
+                            <div class="flex justify-between border-b border-white/20 pb-2">
+                                <span class="opacity-75">Total Investment</span>
+                                <span class="font-semibold" id="goal-sip-total-invested">₹0</span>
+                            </div>
+                            <div class="flex justify-between border-b border-white/20 pb-2">
+                                <span class="opacity-75">Target Amount</span>
+                                <span class="font-semibold" id="goal-sip-target-display">₹0</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="opacity-75">Returns Generated</span>
+                                <span class="font-semibold text-yellow-300" id="goal-sip-returns">₹0</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="calculator-card rounded-2xl shadow-lg p-5 sm:p-6">
+                        <h4 class="font-semibold mb-3 text-slate-200">Strategy Tips</h4>
+                        <ul class="space-y-2 text-sm text-slate-400">
+                            <li class="flex items-start"><span class="text-orange-400 mr-2">•</span>Start early to benefit from compounding</li>
+                            <li class="flex items-start"><span class="text-orange-400 mr-2">•</span>Increase SIP amount annually by 10%</li>
+                            <li class="flex items-start"><span class="text-orange-400 mr-2">•</span>Review and rebalance portfolio periodically</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Goal Lumpsum Calculator -->
+        <div id="goal-lumpsum-calc" class="calculator-section hidden smooth-fade">
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="calculator-card rounded-2xl shadow-xl p-5 sm:p-6">
+                    <h3 class="text-xl sm:text-2xl font-bold mb-6 flex items-center text-white">
+                        <span class="w-8 h-8 bg-indigo-500/20 text-indigo-400 rounded-lg flex items-center justify-center mr-3 text-sm">5</span>
+                        Goal-based Lumpsum
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Target Amount (₹)</label>
+                            <input type="number" id="goal-lump-target" class="input-field w-full px-4 py-3 rounded-lg" placeholder="1000000" value="1000000">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Expected Return Rate (% p.a.)</label>
+                            <input type="number" id="goal-lump-rate" class="input-field w-full px-4 py-3 rounded-lg" placeholder="12" value="12">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Time Period (Years)</label>
+                            <input type="number" id="goal-lump-years" class="input-field w-full px-4 py-3 rounded-lg" placeholder="10" value="10">
+                        </div>
+                        <button onclick="calculateGoalLumpsum()" class="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition transform active:scale-95 shadow-lg shadow-indigo-600/20">Calculate Required Investment</button>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div id="goal-lump-result" class="bg-gradient-to-br from-indigo-600 to-blue-600 rounded-2xl shadow-xl p-5 sm:p-6 text-white hidden">
+                        <h4 class="text-lg font-semibold mb-4 opacity-90">Required Lumpsum Investment</h4>
+                        <div class="text-3xl font-bold mb-1" id="goal-lump-amount">₹0</div>
+                        <p class="text-indigo-100 text-sm mb-4">invest today</p>
+                        <div class="space-y-3">
+                            <div class="flex justify-between border-b border-white/20 pb-2">
+                                <span class="opacity-75">Target Amount</span>
+                                <span class="font-semibold" id="goal-lump-target-display">₹0</span>
+                            </div>
+                            <div class="flex justify-between border-b border-white/20 pb-2">
+                                <span class="opacity-75">Wealth Growth</span>
+                                <span class="font-semibold" id="goal-lump-growth">₹0</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="opacity-75">Growth Multiple</span>
+                                <span class="font-semibold text-yellow-300" id="goal-lump-multiple">0x</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Retirement Calculator -->
+        <div id="retirement-calc" class="calculator-section hidden smooth-fade">
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="calculator-card rounded-2xl shadow-xl p-5 sm:p-6">
+                    <h3 class="text-xl sm:text-2xl font-bold mb-6 flex items-center text-white">
+                        <span class="w-8 h-8 bg-teal-500/20 text-teal-400 rounded-lg flex items-center justify-center mr-3 text-sm">6</span>
+                        Retirement Planning
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-1">Current Age</label>
+                                <input type="number" id="retire-current-age" class="input-field w-full px-4 py-3 rounded-lg" placeholder="30" value="30">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-1">Retirement Age</label>
+                                <input type="number" id="retire-age" class="input-field w-full px-4 py-3 rounded-lg" placeholder="60" value="60">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Monthly Expenses (Current) (₹)</label>
+                            <input type="number" id="retire-expenses" class="input-field w-full px-4 py-3 rounded-lg" placeholder="50000" value="50000">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Expected Inflation (%)</label>
+                            <input type="number" id="retire-inflation" class="input-field w-full px-4 py-3 rounded-lg" placeholder="6" value="6">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Post-retirement Return (%)</label>
+                            <input type="number" id="retire-return" class="input-field w-full px-4 py-3 rounded-lg" placeholder="8" value="8">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Life Expectancy (Years)</label>
+                            <input type="number" id="retire-life" class="input-field w-full px-4 py-3 rounded-lg" placeholder="85" value="85">
+                        </div>
+                        <button onclick="calculateRetirement()" class="w-full bg-teal-600 text-white py-3 rounded-lg font-semibold hover:bg-teal-700 transition transform active:scale-95 shadow-lg shadow-teal-600/20">Calculate Retirement Corpus</button>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div id="retire-result" class="bg-gradient-to-br from-teal-600 to-cyan-600 rounded-2xl shadow-xl p-5 sm:p-6 text-white hidden">
+                        <h4 class="text-lg font-semibold mb-4 opacity-90">Retirement Analysis</h4>
+                        <div class="space-y-4">
+                            <div class="bg-white/10 rounded-lg p-3">
+                                <p class="text-sm opacity-75">Required Retirement Corpus</p>
+                                <p class="text-2xl font-bold" id="retire-corpus">₹0</p>
+                            </div>
+                            <div class="bg-white/10 rounded-lg p-3">
+                                <p class="text-sm opacity-75">Monthly SIP Required</p>
+                                <p class="text-2xl font-bold" id="retire-sip">₹0</p>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3 text-sm">
+                                <div>
+                                    <p class="opacity-75">Future Monthly Expense</p>
+                                    <p class="font-semibold" id="retire-future-expense">₹0</p>
+                                </div>
+                                <div>
+                                    <p class="opacity-75">Years to Retirement</p>
+                                    <p class="font-semibold" id="retire-years-left">0</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="calculator-card rounded-2xl shadow-lg p-4">
+                        <canvas id="retireChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SWP Calculator -->
+        <div id="swp-calc" class="calculator-section hidden smooth-fade">
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="calculator-card rounded-2xl shadow-xl p-5 sm:p-6">
+                    <h3 class="text-xl sm:text-2xl font-bold mb-6 flex items-center text-white">
+                        <span class="w-8 h-8 bg-pink-500/20 text-pink-400 rounded-lg flex items-center justify-center mr-3 text-sm">7</span>
+                        Systematic Withdrawal Plan
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Total Investment (₹)</label>
+                            <input type="number" id="swp-amount" class="input-field w-full px-4 py-3 rounded-lg" placeholder="1000000" value="1000000">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Monthly Withdrawal (₹)</label>
+                            <input type="number" id="swp-withdrawal" class="input-field w-full px-4 py-3 rounded-lg" placeholder="10000" value="10000">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Expected Return Rate (% p.a.)</label>
+                            <input type="number" id="swp-rate" class="input-field w-full px-4 py-3 rounded-lg" placeholder="8" value="8">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Withdrawal Period (Years)</label>
+                            <input type="number" id="swp-years" class="input-field w-full px-4 py-3 rounded-lg" placeholder="20" value="20">
+                        </div>
+                        <button onclick="calculateSWP()" class="w-full bg-pink-600 text-white py-3 rounded-lg font-semibold hover:bg-pink-700 transition transform active:scale-95 shadow-lg shadow-pink-600/20">Calculate SWP</button>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div id="swp-result" class="bg-gradient-to-br from-pink-600 to-rose-600 rounded-2xl shadow-xl p-5 sm:p-6 text-white hidden">
+                        <h4 class="text-lg font-semibold mb-4 opacity-90">SWP Analysis</h4>
+                        <div class="space-y-3">
+                            <div class="flex justify-between border-b border-white/20 pb-2">
+                                <span class="opacity-75">Total Withdrawn</span>
+                                <span class="font-semibold" id="swp-total-withdrawn">₹0</span>
+                            </div>
+                            <div class="flex justify-between border-b border-white/20 pb-2">
+                                <span class="opacity-75">Remaining Corpus</span>
+                                <span class="font-semibold" id="swp-remaining">₹0</span>
+                            </div>
+                            <div class="flex justify-between border-b border-white/20 pb-2">
+                                <span class="opacity-75">Returns Earned</span>
+                                <span class="font-semibold" id="swp-earned">₹0</span>
+                            </div>
+                            <div class="flex justify-between text-yellow-300">
+                                <span class="opacity-75">Sustainability</span>
+                                <span class="font-bold" id="swp-status">Sustainable</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="calculator-card rounded-2xl shadow-lg p-4 overflow-x-auto max-h-96 overflow-y-auto">
+                        <table class="w-full text-sm">
+                            <thead class="bg-slate-800 sticky top-0">
+                                <tr>
+                                    <th class="px-3 py-2 text-left text-slate-300">Year</th>
+                                    <th class="px-3 py-2 text-right text-slate-300">Withdrawal</th>
+                                    <th class="px-3 py-2 text-right text-slate-300">Balance</th>
+                                </tr>
+                            </thead>
+                            <tbody id="swp-table" class="divide-y divide-slate-700 text-slate-400"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Position Sizing Calculator -->
+        <div id="position-calc" class="calculator-section hidden smooth-fade">
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="calculator-card rounded-2xl shadow-xl p-5 sm:p-6">
+                    <h3 class="text-xl sm:text-2xl font-bold mb-6 flex items-center text-white">
+                        <span class="w-8 h-8 bg-red-500/20 text-red-400 rounded-lg flex items-center justify-center mr-3 text-sm">8</span>
+                        Position Sizing
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Account Size (₹)</label>
+                            <input type="number" id="pos-account" class="input-field w-full px-4 py-3 rounded-lg" placeholder="100000" value="100000">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Risk per Trade (%)</label>
+                            <input type="number" id="pos-risk" class="input-field w-full px-4 py-3 rounded-lg" placeholder="2" value="2">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Entry Price (₹)</label>
+                            <input type="number" id="pos-entry" class="input-field w-full px-4 py-3 rounded-lg" placeholder="1000" value="1000">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Stop Loss (₹)</label>
+                            <input type="number" id="pos-stop" class="input-field w-full px-4 py-3 rounded-lg" placeholder="950" value="950">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Target Price (₹) (Optional)</label>
+                            <input type="number" id="pos-target" class="input-field w-full px-4 py-3 rounded-lg" placeholder="1200" value="1200">
+                        </div>
+                        <button onclick="calculatePosition()" class="w-full bg-red-600 text-white py-3 rounded-lg font-semibold hover:bg-red-700 transition transform active:scale-95 shadow-lg shadow-red-600/20">Calculate Position Size</button>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div id="pos-result" class="bg-gradient-to-br from-red-600 to-orange-600 rounded-2xl shadow-xl p-5 sm:p-6 text-white hidden">
+                        <h4 class="text-lg font-semibold mb-4 opacity-90">Risk Management</h4>
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div class="bg-white/10 rounded-lg p-3">
+                                <p class="text-xs opacity-75">Position Size</p>
+                                <p class="text-xl font-bold" id="pos-size">0 shares</p>
+                            </div>
+                            <div class="bg-white/10 rounded-lg p-3">
+                                <p class="text-xs opacity-75">Investment Amount</p>
+                                <p class="text-xl font-bold" id="pos-investment">₹0</p>
+                            </div>
+                        </div>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between border-b border-white/20 pb-1">
+                                <span class="opacity-75">Risk Amount</span>
+                                <span class="font-semibold" id="pos-risk-amount">₹0</span>
+                            </div>
+                            <div class="flex justify-between border-b border-white/20 pb-1">
+                                <span class="opacity-75">Stop Loss %</span>
+                                <span class="font-semibold" id="pos-stop-pct">0%</span>
+                            </div>
+                            <div class="flex justify-between border-b border-white/20 pb-1">
+                                <span class="opacity-75">Risk:Reward</span>
+                                <span class="font-semibold text-yellow-300" id="pos-rr">1:0</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="opacity-75">Portfolio Allocation</span>
+                                <span class="font-semibold" id="pos-allocation">0%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-yellow-500/10 border border-yellow-500/20 rounded-2xl p-5 sm:p-6">
+                        <h4 class="font-semibold mb-2 text-yellow-400 flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+                            Risk Warning
+                        </h4>
+                        <p class="text-sm text-yellow-200/80">Never risk more than 1-2% of your capital on a single trade. Position sizing is crucial for long-term survival in markets.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- About Modal -->
+    <div id="aboutModal" class="fixed inset-0 z-[60] hidden">
+        <div class="modal-backdrop absolute inset-0 transition-opacity opacity-0" id="modalBackdrop" onclick="closeAboutModal()"></div>
+        <div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+            <div class="bg-slate-800/95 backdrop-blur-xl border border-slate-700 rounded-3xl shadow-2xl max-w-md w-full p-6 sm:p-8 transform scale-95 opacity-0 transition-all duration-300 pointer-events-auto" id="modalContent">
+                <div class="flex justify-between items-start mb-6">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center text-white font-bold text-2xl shadow-lg">
+                            ₹
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-white">About</h3>
+                            <p class="text-slate-400 text-sm">Financial Calculators v1.0</p>
+                        </div>
+                    </div>
+                    <button onclick="closeAboutModal()" class="text-slate-400 hover:text-white transition p-1">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+                
+                <div class="space-y-4 text-slate-300 text-sm leading-relaxed">
+                    <p>Welcome to <span class="text-indigo-400 font-semibold">Financial Calculators</span>, your comprehensive suite of professional-grade investment tools.</p>
+                    
+                    <div class="bg-slate-700/50 rounded-xl p-4 space-y-3">
+                        <div class="flex items-start space-x-3">
+                            <span class="text-emerald-400 mt-0.5">✓</span>
+                            <span><strong class="text-white">8 Powerful Calculators</strong> — From SIP to Retirement planning</span>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <span class="text-emerald-400 mt-0.5">✓</span>
+                            <span><strong class="text-white">Works Offline</strong> — Install as PWA and use without internet</span>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <span class="text-emerald-400 mt-0.5">✓</span>
+                            <span><strong class="text-white">Mobile Optimized</strong> — Native app experience on Android & iOS</span>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <span class="text-emerald-400 mt-0.5">✓</span>
+                            <span><strong class="text-white">Privacy First</strong> — No data leaves your device</span>
+                        </div>
+                    </div>
+
+                    <p class="text-xs text-slate-500 pt-2">Designed for investors, by investors. Make informed financial decisions with precision.</p>
+                </div>
+
+                <button onclick="closeAboutModal()" class="w-full mt-6 bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl font-semibold transition transform active:scale-95">
+                    Got it
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Install Prompt (Bottom Sheet for Mobile) -->
+    <div id="installPrompt" class="fixed inset-0 z-[70] hidden sm:hidden">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="hideInstallPrompt()"></div>
+        <div class="absolute bottom-0 left-0 right-0 bg-slate-800 rounded-t-3xl p-6 install-prompt border-t border-slate-700">
+            <div class="flex items-center space-x-4 mb-4">
+                <div class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center text-white font-bold text-3xl shadow-lg">
+                    ₹
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-white">Install Financial Calculators</h3>
+                    <p class="text-slate-400 text-sm">Add to Home Screen for quick access</p>
+                </div>
+            </div>
+            <div class="space-y-3">
+                <button onclick="installApp()" class="w-full bg-indigo-600 text-white py-4 rounded-xl font-semibold hover:bg-indigo-700 transition shadow-lg shadow-indigo-600/20">
+                    Install App
+                </button>
+                <button onclick="hideInstallPrompt()" class="w-full bg-slate-700 text-slate-300 py-4 rounded-xl font-semibold hover:bg-slate-600 transition">
+                    Not Now
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Disclaimer -->
+    <section class="bg-slate-800/50 border-t border-slate-700 mt-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="bg-yellow-500/10 border-l-4 border-yellow-500/50 p-4 rounded-r-xl">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-yellow-500" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <h3 class="text-sm font-medium text-yellow-400">Disclaimer</h3>
+                        <div class="mt-2 text-sm text-yellow-200/70">
+                            <p>These calculators are for educational purposes only and do not constitute financial advice. Past performance does not guarantee future results. Please consult a certified financial planner before making investment decisions.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // PWA Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            const swCode = `
+                self.addEventListener('install', e => {
+                    e.waitUntil(
+                        caches.open('finance-calc-v1').then(cache => {
+                            return cache.addAll(['/']);
+                        })
+                    );
+                    self.skipWaiting();
+                });
+                
+                self.addEventListener('fetch', e => {
+                    e.respondWith(
+                        caches.match(e.request).then(response => {
+                            return response || fetch(e.request);
+                        })
+                    );
+                });
+            `;
+            
+            const blob = new Blob([swCode], { type: 'application/javascript' });
+            const swUrl = URL.createObjectURL(blob);
+            
+            navigator.serviceWorker.register(swUrl).then(registration => {
+                console.log('SW registered:', registration);
+            }).catch(error => {
+                console.log('SW registration failed:', error);
+            });
+        }
+
+        // Install Prompt Logic
+        let deferredPrompt;
+        const installBtn = document.getElementById('installBtn');
+        const mobileInstallBanner = document.getElementById('mobileInstallBanner');
+        const installPrompt = document.getElementById('installPrompt');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBtn.classList.remove('hidden');
+            mobileInstallBanner.classList.remove('hidden');
+        });
+
+        function showInstallPrompt() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted install');
+                        hideInstallPrompt();
+                    }
+                    deferredPrompt = null;
+                });
+            } else {
+                // Show custom install prompt for iOS or unsupported browsers
+                installPrompt.classList.remove('hidden');
+            }
+        }
+
+        function hideInstallPrompt() {
+            installPrompt.classList.add('hidden');
+        }
+
+        function installApp() {
+            hideInstallPrompt();
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+            }
+        }
+
+        // About Modal Logic
+        function openAboutModal() {
+            const modal = document.getElementById('aboutModal');
+            const backdrop = document.getElementById('modalBackdrop');
+            const content = document.getElementById('modalContent');
+            
+            modal.classList.remove('hidden');
+            // Trigger reflow
+            void modal.offsetWidth;
+            
+            backdrop.classList.remove('opacity-0');
+            content.classList.remove('scale-95', 'opacity-0');
+            content.classList.add('scale-100', 'opacity-100');
+        }
+
+        function closeAboutModal() {
+            const modal = document.getElementById('aboutModal');
+            const backdrop = document.getElementById('modalBackdrop');
+            const content = document.getElementById('modalContent');
+            
+            backdrop.classList.add('opacity-0');
+            content.classList.remove('scale-100', 'opacity-100');
+            content.classList.add('scale-95', 'opacity-0');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        // Global chart instances
+        let sipChartInstance = null;
+        let lumpChartInstance = null;
+        let retireChartInstance = null;
+
+        // Utility functions
+        function formatCurrency(amount) {
+            if (amount >= 10000000) return '₹' + (amount/10000000).toFixed(2) + ' Cr';
+            if (amount >= 100000) return '₹' + (amount/100000).toFixed(2) + ' Lakh';
+            return '₹' + Math.round(amount).toLocaleString('en-IN');
+        }
+
+        function updateSlider(inputId, sliderId) {
+            document.getElementById(sliderId).value = document.getElementById(inputId).value;
+        }
+
+        function updateInput(inputId, sliderId) {
+            document.getElementById(inputId).value = document.getElementById(sliderId).value;
+        }
+
+        // Tab switching
+        function showCalculator(calcId) {
+            document.querySelectorAll('.calculator-section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            document.getElementById(calcId + '-calc').classList.remove('hidden');
+            
+            document.querySelectorAll('.calc-tab').forEach(tab => {
+                tab.classList.remove('tab-active', 'text-indigo-400');
+                tab.classList.add('text-slate-400');
+            });
+            
+            const activeTab = document.querySelector(`[data-calc="${calcId}"]`);
+            if (activeTab) {
+                activeTab.classList.add('tab-active', 'text-indigo-400');
+                activeTab.classList.remove('text-slate-400');
+            }
+            
+            // Scroll to top smoothly
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // CAGR Calculator
+        function calculateCAGR() {
+            const initial = parseFloat(document.getElementById('cagr-initial').value);
+            const final = parseFloat(document.getElementById('cagr-final').value);
+            const years = parseFloat(document.getElementById('cagr-years').value);
+            
+            if (initial && final && years) {
+                const cagr = (Math.pow(final / initial, 1 / years) - 1) * 100;
+                const totalReturn = final - initial;
+                const absoluteReturn = ((final - initial) / initial) * 100;
+                
+                document.getElementById('cagr-value').textContent = cagr.toFixed(2) + '%';
+                document.getElementById('cagr-return').textContent = formatCurrency(totalReturn);
+                document.getElementById('cagr-absolute').textContent = absoluteReturn.toFixed(2) + '%';
+                document.getElementById('cagr-result').classList.remove('hidden');
+            }
+        }
+
+        // SIP Calculator
+        function calculateSIP() {
+            const monthlyInvestment = parseFloat(document.getElementById('sip-amount').value);
+            const rateOfReturn = parseFloat(document.getElementById('sip-rate').value);
+            const years = parseFloat(document.getElementById('sip-years').value);
+            
+            if (monthlyInvestment && rateOfReturn && years) {
+                const months = years * 12;
+                const monthlyRate = rateOfReturn / 12 / 100;
+                
+                const futureValue = monthlyInvestment * ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate) * (1 + monthlyRate);
+                const totalInvested = monthlyInvestment * months;
+                const estimatedReturns = futureValue - totalInvested;
+                const gainPercent = (estimatedReturns / totalInvested) * 100;
+                
+                document.getElementById('sip-total').textContent = formatCurrency(futureValue);
+                document.getElementById('sip-invested').textContent = formatCurrency(totalInvested);
+                document.getElementById('sip-returns').textContent = formatCurrency(estimatedReturns);
+                document.getElementById('sip-gain').textContent = gainPercent.toFixed(1) + '%';
+                document.getElementById('sip-result').classList.remove('hidden');
+                
+                const ctx = document.getElementById('sipChart').getContext('2d');
+                if (sipChartInstance) sipChartInstance.destroy();
+                
+                sipChartInstance = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Invested Amount', 'Est. Returns'],
+                        datasets: [{
+                            data: [totalInvested, estimatedReturns],
+                            backgroundColor: ['#10B981', '#34D399'],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: { 
+                                position: 'bottom',
+                                labels: { color: '#94a3b8' }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // Lumpsum Calculator
+        function calculateLumpsum() {
+            const amount = parseFloat(document.getElementById('lump-amount').value);
+            const rate = parseFloat(document.getElementById('lump-rate').value);
+            const years = parseFloat(document.getElementById('lump-years').value);
+            
+            if (amount && rate && years) {
+                const futureValue = amount * Math.pow((1 + rate / 100), years);
+                const returns = futureValue - amount;
+                const multiplier = futureValue / amount;
+                
+                document.getElementById('lump-total').textContent = formatCurrency(futureValue);
+                document.getElementById('lump-invested').textContent = formatCurrency(amount);
+                document.getElementById('lump-returns').textContent = formatCurrency(returns);
+                document.getElementById('lump-multiplier').textContent = multiplier.toFixed(1) + 'x';
+                document.getElementById('lump-result').classList.remove('hidden');
+                
+                const ctx = document.getElementById('lumpChart').getContext('2d');
+                if (lumpChartInstance) lumpChartInstance.destroy();
+                
+                lumpChartInstance = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Principal', 'Returns'],
+                        datasets: [{
+                            data: [amount, returns],
+                            backgroundColor: ['#8B5CF6', '#EC4899'],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: { 
+                                position: 'bottom',
+                                labels: { color: '#94a3b8' }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // Goal SIP Calculator
+        function calculateGoalSIP() {
+            const target = parseFloat(document.getElementById('goal-sip-target').value);
+            const rate = parseFloat(document.getElementById('goal-sip-rate').value);
+            const years = parseFloat(document.getElementById('goal-sip-years').value);
+            
+            if (target && rate && years) {
+                const months = years * 12;
+                const monthlyRate = rate / 12 / 100;
+                
+                const sipAmount = target / (((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate) * (1 + monthlyRate));
+                const totalInvested = sipAmount * months;
+                const returns = target - totalInvested;
+                
+                document.getElementById('goal-sip-amount').textContent = formatCurrency(sipAmount);
+                document.getElementById('goal-sip-total-invested').textContent = formatCurrency(totalInvested);
+                document.getElementById('goal-sip-target-display').textContent = formatCurrency(target);
+                document.getElementById('goal-sip-returns').textContent = formatCurrency(returns);
+                document.getElementById('goal-sip-result').classList.remove('hidden');
+            }
+        }
+
+        // Goal Lumpsum Calculator
+        function calculateGoalLumpsum() {
+            const target = parseFloat(document.getElementById('goal-lump-target').value);
+            const rate = parseFloat(document.getElementById('goal-lump-rate').value);
+            const years = parseFloat(document.getElementById('goal-lump-years').value);
+            
+            if (target && rate && years) {
+                const presentValue = target / Math.pow((1 + rate / 100), years);
+                const growth = target - presentValue;
+                const multiple = target / presentValue;
+                
+                document.getElementById('goal-lump-amount').textContent = formatCurrency(presentValue);
+                document.getElementById('goal-lump-target-display').textContent = formatCurrency(target);
+                document.getElementById('goal-lump-growth').textContent = formatCurrency(growth);
+                document.getElementById('goal-lump-multiple').textContent = multiple.toFixed(1) + 'x';
+                document.getElementById('goal-lump-result').classList.remove('hidden');
+            }
+        }
+
+        // Retirement Calculator
+        function calculateRetirement() {
+            const currentAge = parseFloat(document.getElementById('retire-current-age').value);
+            const retireAge = parseFloat(document.getElementById('retire-age').value);
+            const monthlyExpenses = parseFloat(document.getElementById('retire-expenses').value);
+            const inflation = parseFloat(document.getElementById('retire-inflation').value);
+            const postReturn = parseFloat(document.getElementById('retire-return').value);
+            const lifeExpectancy = parseFloat(document.getElementById('retire-life').value);
+            
+            if (currentAge && retireAge && monthlyExpenses) {
+                const yearsToRetire = retireAge - currentAge;
+                const retirementYears = lifeExpectancy - retireAge;
+                
+                const futureMonthlyExpense = monthlyExpenses * Math.pow((1 + inflation / 100), yearsToRetire);
+                
+                const realRate = (postReturn - inflation) / 100;
+                let corpusNeeded;
+                if (realRate === 0) {
+                    corpusNeeded = futureMonthlyExpense * 12 * retirementYears;
+                } else {
+                    corpusNeeded = (futureMonthlyExpense * 12) * (1 - Math.pow((1 + realRate), -retirementYears)) / realRate;
+                }
+                
+                const preReturn = 12;
+                const months = yearsToRetire * 12;
+                const monthlyRate = preReturn / 12 / 100;
+                const sipRequired = corpusNeeded / (((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate) * (1 + monthlyRate));
+                
+                document.getElementById('retire-corpus').textContent = formatCurrency(corpusNeeded);
+                document.getElementById('retire-sip').textContent = formatCurrency(sipRequired);
+                document.getElementById('retire-future-expense').textContent = formatCurrency(futureMonthlyExpense);
+                document.getElementById('retire-years-left').textContent = yearsToRetire;
+                document.getElementById('retire-result').classList.remove('hidden');
+                
+                const ctx = document.getElementById('retireChart').getContext('2d');
+                if (retireChartInstance) retireChartInstance.destroy();
+                
+                const labels = [];
+                const corpusData = [];
+                const investedData = [];
+                
+                for (let i = 0; i <= yearsToRetire; i += 5) {
+                    labels.push('Age ' + (currentAge + i));
+                    const monthsPassed = i * 12;
+                    const totalInvested = sipRequired * monthsPassed;
+                    const currentCorpus = sipRequired * ((Math.pow(1 + monthlyRate, monthsPassed) - 1) / monthlyRate) * (1 + monthlyRate);
+                    corpusData.push(currentCorpus);
+                    investedData.push(totalInvested);
+                }
+                
+                retireChartInstance = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Projected Corpus',
+                            data: corpusData,
+                            borderColor: '#14B8A6',
+                            backgroundColor: 'rgba(20, 184, 166, 0.1)',
+                            fill: true
+                        }, {
+                            label: 'Amount Invested',
+                            data: investedData,
+                            borderColor: '#64748b',
+                            borderDash: [5, 5]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: { 
+                                position: 'bottom',
+                                labels: { color: '#94a3b8' }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                ticks: {
+                                    color: '#64748b',
+                                    callback: function(value) {
+                                        return '₹' + (value/100000).toFixed(0) + 'L';
+                                    }
+                                },
+                                grid: { color: '#334155' }
+                            },
+                            x: {
+                                ticks: { color: '#64748b' },
+                                grid: { color: '#334155' }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // SWP Calculator
+        function calculateSWP() {
+            const initial = parseFloat(document.getElementById('swp-amount').value);
+            const monthlyWithdrawal = parseFloat(document.getElementById('swp-withdrawal').value);
+            const rate = parseFloat(document.getElementById('swp-rate').value);
+            const years = parseFloat(document.getElementById('swp-years').value);
+            
+            if (initial && monthlyWithdrawal && rate !== undefined && years) {
+                const monthlyRate = rate / 12 / 100;
+                
+                let balance = initial;
+                let totalWithdrawn = 0;
+                const tableBody = document.getElementById('swp-table');
+                tableBody.innerHTML = '';
+                
+                for (let year = 1; year <= years; year++) {
+                    for (let month = 1; month <= 12; month++) {
+                        balance = balance * (1 + monthlyRate) - monthlyWithdrawal;
+                        totalWithdrawn += monthlyWithdrawal;
+                        if (balance <= 0) {
+                            balance = 0;
+                            break;
+                        }
+                    }
+                    
+                    const row = document.createElement('tr');
+                    row.className = 'hover:bg-slate-800/50 transition';
+                    row.innerHTML = `
+                        <td class="px-3 py-2 font-medium text-slate-300">Year ${year}</td>
+                        <td class="px-3 py-2 text-right text-rose-400">-${formatCurrency(monthlyWithdrawal * 12)}</td>
+                        <td class="px-3 py-2 text-right font-semibold text-emerald-400">${formatCurrency(balance)}</td>
+                    `;
+                    tableBody.appendChild(row);
+                    
+                    if (balance <= 0) break;
+                }
+                
+                const totalReturns = totalWithdrawn + balance - initial;
+                const sustainable = balance > 0 ? 'Sustainable' : 'Depleted';
+                
+                document.getElementById('swp-total-withdrawn').textContent = formatCurrency(totalWithdrawn);
+                document.getElementById('swp-remaining').textContent = formatCurrency(balance);
+                document.getElementById('swp-earned').textContent = formatCurrency(totalReturns);
+                document.getElementById('swp-status').textContent = sustainable;
+                document.getElementById('swp-result').classList.remove('hidden');
+            }
+        }
+
+        // Position Sizing Calculator
+        function calculatePosition() {
+            const account = parseFloat(document.getElementById('pos-account').value);
+            const riskPercent = parseFloat(document.getElementById('pos-risk').value);
+            const entry = parseFloat(document.getElementById('pos-entry').value);
+            const stop = parseFloat(document.getElementById('pos-stop').value);
+            const target = parseFloat(document.getElementById('pos-target').value);
+            
+            if (account && riskPercent && entry && stop) {
+                const riskAmount = account * (riskPercent / 100);
+                const riskPerShare = Math.abs(entry - stop);
+                const shares = Math.floor(riskAmount / riskPerShare);
+                const investment = shares * entry;
+                const stopPercent = (riskPerShare / entry) * 100;
+                const allocation = (investment / account) * 100;
+                
+                let riskReward = '1:0';
+                if (target) {
+                    const reward = Math.abs(target - entry);
+                    const rr = (reward / riskPerShare).toFixed(1);
+                    riskReward = '1:' + rr;
+                }
+                
+                document.getElementById('pos-size').textContent = shares.toLocaleString() + ' shares';
+                document.getElementById('pos-investment').textContent = formatCurrency(investment);
+                document.getElementById('pos-risk-amount').textContent = formatCurrency(riskAmount);
+                document.getElementById('pos-stop-pct').textContent = stopPercent.toFixed(2) + '%';
+                document.getElementById('pos-rr').textContent = riskReward;
+                document.getElementById('pos-allocation').textContent = allocation.toFixed(1) + '%';
+                document.getElementById('pos-result').classList.remove('hidden');
+            }
+        }
+
+        // Initialize
+        showCalculator('cagr');
+        
+        // Check if running as installed PWA
+        if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
+            document.getElementById('installBtn').classList.add('hidden');
+            document.getElementById('mobileInstallBanner').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
