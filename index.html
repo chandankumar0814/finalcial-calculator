@@ -390,7 +390,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="calculator-card rounded-2xl shadow-lg p-4">
+                    <div id="sip-chart-card" class="calculator-card rounded-2xl shadow-lg p-4 hidden">
                         <canvas id="sipChart"></canvas>
                     </div>
                     <div class="calculator-card rounded-2xl shadow-lg p-5 sm:p-6">
@@ -456,7 +456,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="calculator-card rounded-2xl shadow-lg p-4">
+                    <div id="lump-chart-card" class="calculator-card rounded-2xl shadow-lg p-4 hidden">
                         <canvas id="lumpChart"></canvas>
                     </div>
                     <div class="calculator-card rounded-2xl shadow-lg p-5 sm:p-6">
@@ -676,7 +676,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="calculator-card rounded-2xl shadow-lg p-4">
+                    <div id="retire-chart-card" class="calculator-card rounded-2xl shadow-lg p-4 hidden">
                         <canvas id="retireChart"></canvas>
                     </div>
                     <div class="calculator-card rounded-2xl shadow-lg p-5 sm:p-6">
@@ -749,7 +749,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="calculator-card rounded-2xl shadow-lg p-4 overflow-x-auto max-h-96 overflow-y-auto">
+                    <div id="swp-table-card"
+                        class="calculator-card rounded-2xl shadow-lg p-4 overflow-x-auto max-h-96 overflow-y-auto hidden">
                         <table class="w-full text-sm">
                             <thead class="bg-slate-800 sticky top-0">
                                 <tr>
@@ -1149,6 +1150,7 @@
                 document.getElementById('sip-returns').textContent = formatCurrency(estimatedReturns);
                 document.getElementById('sip-gain').textContent = gainPercent.toFixed(1) + '%';
                 document.getElementById('sip-result').classList.remove('hidden');
+                document.getElementById('sip-chart-card').classList.remove('hidden');
 
                 const ctx = document.getElementById('sipChart').getContext('2d');
                 if (sipChartInstance) sipChartInstance.destroy();
@@ -1193,6 +1195,7 @@
                 document.getElementById('lump-returns').textContent = formatCurrency(returns);
                 document.getElementById('lump-multiplier').textContent = multiplier.toFixed(1) + 'x';
                 document.getElementById('lump-result').classList.remove('hidden');
+                document.getElementById('lump-chart-card').classList.remove('hidden');
 
                 const ctx = document.getElementById('lumpChart').getContext('2d');
                 if (lumpChartInstance) lumpChartInstance.destroy();
@@ -1295,6 +1298,7 @@
                 document.getElementById('retire-future-expense').textContent = formatCurrency(futureMonthlyExpense);
                 document.getElementById('retire-years-left').textContent = yearsToRetire;
                 document.getElementById('retire-result').classList.remove('hidden');
+                document.getElementById('retire-chart-card').classList.remove('hidden');
 
                 const ctx = document.getElementById('retireChart').getContext('2d');
                 if (retireChartInstance) retireChartInstance.destroy();
@@ -1403,6 +1407,7 @@
                 document.getElementById('swp-earned').textContent = formatCurrency(totalReturns);
                 document.getElementById('swp-status').textContent = sustainable;
                 document.getElementById('swp-result').classList.remove('hidden');
+                document.getElementById('swp-table-card').classList.remove('hidden');
             }
         }
 
