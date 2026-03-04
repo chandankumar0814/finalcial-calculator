@@ -15,7 +15,10 @@ self.addEventListener('install', event => {
         caches.open(CACHE_NAME)
             .then(cache => {
                 console.log('Opened cache');
-                return cache.addAll(ASSETS);
+                // Use a resilient approach: individually add assets or ignore failures
+                return Promise.allSettled(
+                    ASSETS.map(asset => cache.add(asset))
+                );
             })
             .then(() => self.skipWaiting())
     );
