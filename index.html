@@ -260,6 +260,15 @@
                 <button onclick="showCalculator('swp')"
                     class="calc-tab px-3 sm:px-4 py-2 text-sm font-medium text-slate-400 hover:text-indigo-400 whitespace-nowrap transition"
                     data-calc="swp">SWP</button>
+                <button onclick="showCalculator('ppf')"
+                    class="calc-tab px-3 sm:px-4 py-2 text-sm font-medium text-slate-400 hover:text-indigo-400 whitespace-nowrap transition"
+                    data-calc="ppf">PPF</button>
+                <button onclick="showCalculator('ssy')"
+                    class="calc-tab px-3 sm:px-4 py-2 text-sm font-medium text-slate-400 hover:text-indigo-400 whitespace-nowrap transition"
+                    data-calc="ssy">SSY</button>
+                <button onclick="showCalculator('kvp')"
+                    class="calc-tab px-3 sm:px-4 py-2 text-sm font-medium text-slate-400 hover:text-indigo-400 whitespace-nowrap transition"
+                    data-calc="kvp">KVP</button>
                 <button onclick="showCalculator('position')"
                     class="calc-tab px-3 sm:px-4 py-2 text-sm font-medium text-slate-400 hover:text-indigo-400 whitespace-nowrap transition"
                     data-calc="position">Position</button>
@@ -773,6 +782,166 @@
             </div>
         </div>
 
+        <!-- PPF Calculator -->
+        <div id="ppf-calc" class="calculator-section hidden smooth-fade">
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="calculator-card rounded-2xl shadow-xl p-5 sm:p-6">
+                    <h3 class="text-xl sm:text-2xl font-bold mb-6 flex items-center text-white">
+                        <span
+                            class="w-8 h-8 bg-blue-500/20 text-blue-400 rounded-lg flex items-center justify-center mr-3 text-sm">9</span>
+                        PPF Calculator
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Annual Investment (₹)</label>
+                            <input type="number" id="ppf-amount" class="input-field w-full px-4 py-3 rounded-lg"
+                                placeholder="150000" value="150000">
+                        </div>
+                        <div class="bg-slate-700/30 p-3 rounded-lg border border-slate-600">
+                            <p class="text-xs text-slate-400">Current Interest Rate: <span
+                                    class="text-blue-400 font-semibold">7.1% p.a.</span></p>
+                            <p class="text-xs text-slate-400">Lock-in Period: <span
+                                    class="text-blue-400 font-semibold">15 Years</span></p>
+                        </div>
+                        <button onclick="calculatePPF()"
+                            class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition transform active:scale-95 shadow-lg shadow-blue-600/20">Calculate
+                            PPF Returns</button>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div id="ppf-result"
+                        class="bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl shadow-xl p-5 sm:p-6 text-white hidden">
+                        <h4 class="text-lg font-semibold mb-4 opacity-90">Maturity Analysis</h4>
+                        <div class="text-3xl font-bold mb-1" id="ppf-total">₹0</div>
+                        <p class="text-blue-100 text-sm mb-4">Maturity Value (15 Years)</p>
+                        <div class="space-y-3">
+                            <div class="flex justify-between border-b border-white/20 pb-2">
+                                <span class="opacity-75">Total Invested</span>
+                                <span class="font-semibold" id="ppf-invested">₹0</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="opacity-75">Total Interest</span>
+                                <span class="font-semibold text-yellow-300" id="ppf-interest">₹0</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="calculator-card rounded-2xl shadow-lg p-5 sm:p-6">
+                        <h4 class="font-semibold mb-3 text-slate-200">What is PPF?</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed">Public Provident Fund (PPF) is a popular
+                            long-term savings scheme in India, offering tax-free returns and safety. It has a mandatory
+                            lock-in period of 15 years.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SSY Calculator -->
+        <div id="ssy-calc" class="calculator-section hidden smooth-fade">
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="calculator-card rounded-2xl shadow-xl p-5 sm:p-6">
+                    <h3 class="text-xl sm:text-2xl font-bold mb-6 flex items-center text-white">
+                        <span
+                            class="w-8 h-8 bg-pink-500/20 text-pink-400 rounded-lg flex items-center justify-center mr-3 text-sm">10</span>
+                        SSY Calculator
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Annual Investment (₹)</label>
+                            <input type="number" id="ssy-amount" class="input-field w-full px-4 py-3 rounded-lg"
+                                placeholder="150000" value="150000">
+                        </div>
+                        <div class="bg-slate-700/30 p-3 rounded-lg border border-slate-600">
+                            <p class="text-xs text-slate-400">Current Interest Rate: <span
+                                    class="text-pink-400 font-semibold">8.2% p.a.</span></p>
+                            <p class="text-xs text-slate-400">Contribution: <span class="text-pink-400 font-semibold">15
+                                    Years</span> | Maturity: <span class="text-pink-400 font-semibold">21 Years</span>
+                            </p>
+                        </div>
+                        <button onclick="calculateSSY()"
+                            class="w-full bg-pink-600 text-white py-3 rounded-lg font-semibold hover:bg-pink-700 transition transform active:scale-95 shadow-lg shadow-pink-600/20">Calculate
+                            SSY Returns</button>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div id="ssy-result"
+                        class="bg-gradient-to-br from-pink-600 to-rose-600 rounded-2xl shadow-xl p-5 sm:p-6 text-white hidden">
+                        <h4 class="text-lg font-semibold mb-4 opacity-90">Maturity Analysis</h4>
+                        <div class="text-3xl font-bold mb-1" id="ssy-total">₹0</div>
+                        <p class="text-pink-100 text-sm mb-4">Expected Maturity (21 Years)</p>
+                        <div class="space-y-3">
+                            <div class="flex justify-between border-b border-white/20 pb-2">
+                                <span class="opacity-75">Total Invested</span>
+                                <span class="font-semibold" id="ssy-invested">₹0</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="opacity-75">Total Interest</span>
+                                <span class="font-semibold text-yellow-300" id="ssy-interest">₹0</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="calculator-card rounded-2xl shadow-lg p-5 sm:p-6">
+                        <h4 class="font-semibold mb-3 text-slate-200">What is SSY?</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed">Sukanya Samriddhi Yojana (SSY) is a
+                            government-backed saving scheme for the benefit of girl children. It offers one of the
+                            highest interest rates among small savings schemes.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KVP Calculator -->
+        <div id="kvp-calc" class="calculator-section hidden smooth-fade">
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="calculator-card rounded-2xl shadow-xl p-5 sm:p-6">
+                    <h3 class="text-xl sm:text-2xl font-bold mb-6 flex items-center text-white">
+                        <span
+                            class="w-8 h-8 bg-amber-500/20 text-amber-400 rounded-lg flex items-center justify-center mr-3 text-sm">11</span>
+                        KVP Calculator
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">One-time Investment (₹)</label>
+                            <input type="number" id="kvp-amount" class="input-field w-full px-4 py-3 rounded-lg"
+                                placeholder="100000" value="100000">
+                        </div>
+                        <div class="bg-slate-700/30 p-3 rounded-lg border border-slate-600">
+                            <p class="text-xs text-slate-400">Current Interest Rate: <span
+                                    class="text-amber-400 font-semibold">7.5% p.a.</span></p>
+                            <p class="text-xs text-slate-400">Doubling Period: <span
+                                    class="text-amber-400 font-semibold">115 Months (9y 7m)</span></p>
+                        </div>
+                        <button onclick="calculateKVP()"
+                            class="w-full bg-amber-600 text-white py-3 rounded-lg font-semibold hover:bg-amber-700 transition transform active:scale-95 shadow-lg shadow-amber-600/20">Calculate
+                            KVP Maturity</button>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div id="kvp-result"
+                        class="bg-gradient-to-br from-amber-600 to-orange-600 rounded-2xl shadow-xl p-5 sm:p-6 text-white hidden">
+                        <h4 class="text-lg font-semibold mb-4 opacity-90">Maturity Analysis</h4>
+                        <div class="text-3xl font-bold mb-1" id="kvp-total">₹0</div>
+                        <p class="text-amber-100 text-sm mb-4">Value after 115 Months</p>
+                        <div class="space-y-3">
+                            <div class="flex justify-between border-b border-white/20 pb-2">
+                                <span class="opacity-75">Principal</span>
+                                <span class="font-semibold" id="kvp-invested">₹0</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="opacity-75">Interest Earned</span>
+                                <span class="font-semibold text-yellow-300" id="kvp-interest">₹0</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="calculator-card rounded-2xl shadow-lg p-5 sm:p-6">
+                        <h4 class="font-semibold mb-3 text-slate-200">What is KVP?</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed">Kisan Vikas Patra (KVP) is a certificate-based
+                            savings scheme that doubles your investment over a fixed period, as determined by the
+                            prevailing interest rate.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Position Sizing Calculator -->
         <div id="position-calc" class="calculator-section hidden smooth-fade">
             <div class="grid md:grid-cols-2 gap-6">
@@ -887,7 +1056,7 @@
                         </div>
                         <div>
                             <h3 class="text-2xl font-bold text-white">About</h3>
-                            <p class="text-slate-400 text-sm">Financial Calculators v1.0</p>
+                            <p class="text-slate-400 text-sm">Financial Calculators v1.1</p>
                         </div>
                     </div>
                     <button onclick="closeAboutModal()" class="text-slate-400 hover:text-white transition p-1">
@@ -905,7 +1074,7 @@
                     <div class="bg-slate-700/50 rounded-xl p-4 space-y-3">
                         <div class="flex items-start space-x-3">
                             <span class="text-emerald-400 mt-0.5">✓</span>
-                            <span><strong class="text-white">8 Powerful Calculators</strong> — From SIP to Retirement
+                            <span><strong class="text-white">11 Powerful Calculators</strong> — From SIP to Retirement
                                 planning</span>
                         </div>
                         <div class="flex items-start space-x-3">
@@ -1413,6 +1582,68 @@
         }
 
         // Position Sizing Calculator
+        // PPF Calculator
+        function calculatePPF() {
+            const amount = parseFloat(document.getElementById('ppf-amount').value);
+            const rate = 7.1 / 100;
+            const years = 15;
+
+            if (amount) {
+                // Formula: F = P [({(1 + i) ^ n} - 1) / i]
+                // For annual installments at start of period
+                const futureValue = amount * ((Math.pow(1 + rate, years) - 1) / rate) * (1 + rate);
+                const totalInvested = amount * years;
+                const totalInterest = futureValue - totalInvested;
+
+                document.getElementById('ppf-total').textContent = formatCurrency(futureValue);
+                document.getElementById('ppf-invested').textContent = formatCurrency(totalInvested);
+                document.getElementById('ppf-interest').textContent = formatCurrency(totalInterest);
+                document.getElementById('ppf-result').classList.remove('hidden');
+            }
+        }
+
+        // SSY Calculator
+        function calculateSSY() {
+            const amount = parseFloat(document.getElementById('ssy-amount').value);
+            const rate = 8.2 / 100;
+            const contributionYears = 15;
+            const maturityYears = 21;
+
+            if (amount) {
+                // First 15 years investment
+                let corpus = amount * ((Math.pow(1 + rate, contributionYears) - 1) / rate) * (1 + rate);
+
+                // Next 6 years only interest
+                for (let i = 0; i < (maturityYears - contributionYears); i++) {
+                    corpus = corpus * (1 + rate);
+                }
+
+                const totalInvested = amount * contributionYears;
+                const totalInterest = corpus - totalInvested;
+
+                document.getElementById('ssy-total').textContent = formatCurrency(corpus);
+                document.getElementById('ssy-invested').textContent = formatCurrency(totalInvested);
+                document.getElementById('ssy-interest').textContent = formatCurrency(totalInterest);
+                document.getElementById('ssy-result').classList.remove('hidden');
+            }
+        }
+
+        // KVP Calculator
+        function calculateKVP() {
+            const amount = parseFloat(document.getElementById('kvp-amount').value);
+            const rate = 7.5; // p.a.
+
+            if (amount) {
+                const maturityValue = amount * 2;
+                const interest = amount;
+
+                document.getElementById('kvp-total').textContent = formatCurrency(maturityValue);
+                document.getElementById('kvp-invested').textContent = formatCurrency(amount);
+                document.getElementById('kvp-interest').textContent = formatCurrency(interest);
+                document.getElementById('kvp-result').classList.remove('hidden');
+            }
+        }
+
         function calculatePosition() {
             const account = parseFloat(document.getElementById('pos-account').value);
             const riskPercent = parseFloat(document.getElementById('pos-risk').value);
