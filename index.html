@@ -52,7 +52,6 @@
             overflow-x: hidden;
         }
 
-        /* Prevent pull-to-refresh on mobile */
         body {
             overscroll-behavior-y: none;
         }
@@ -88,6 +87,10 @@
             color: #64748b;
         }
 
+        select.input-field {
+            cursor: pointer;
+        }
+
         .result-card {
             background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
             box-shadow: 0 10px 40px -10px rgba(79, 70, 229, 0.4);
@@ -109,78 +112,140 @@
         }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
 
-        ::-webkit-scrollbar-track {
-            background: #0f172a;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #334155;
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #475569;
-        }
-
-        /* Modal styles */
         .modal-backdrop {
             background: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(8px);
         }
 
-        /* Mobile optimizations */
         @media (max-width: 640px) {
-            .calculator-card {
-                margin: 0 -0.5rem;
-                border-radius: 1rem;
-            }
-
-            input[type="range"] {
-                height: 6px;
-            }
+            .calculator-card { margin: 0 -0.5rem; border-radius: 1rem; }
+            input[type="range"] { height: 6px; }
         }
 
-        /* Safe area for iOS notch */
-        .safe-top {
-            padding-top: env(safe-area-inset-top);
-        }
+        .safe-top  { padding-top:    env(safe-area-inset-top); }
+        .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
 
-        .safe-bottom {
-            padding-bottom: env(safe-area-inset-bottom);
-        }
-
-        /* Install prompt animation */
         @keyframes slideUp {
-            from {
-                transform: translateY(100%);
-                opacity: 0;
-            }
-
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+            from { transform: translateY(100%); opacity: 0; }
+            to   { transform: translateY(0);    opacity: 1; }
         }
 
-        .install-prompt {
-            animation: slideUp 0.3s ease-out;
+        .install-prompt { animation: slideUp 0.3s ease-out; }
+
+        /* ── Breakup tables (FD, RD, EMI, Step-up SIP, NSC) ── */
+        .breakup-wrap {
+            max-height: 260px;
+            overflow-y: auto;
+            border-radius: 0.75rem;
+            border: 1px solid rgba(51, 65, 85, 0.9);
+            margin-top: 14px;
+        }
+        .breakup-table { width: 100%; border-collapse: collapse; font-size: 0.79rem; }
+        .breakup-table thead { position: sticky; top: 0; background: #1e293b; z-index: 1; }
+        .breakup-table th {
+            padding: 8px 10px;
+            color: #94a3b8;
+            font-weight: 600;
+            text-align: right;
+            border-bottom: 1px solid #334155;
+            white-space: nowrap;
+        }
+        .breakup-table th:first-child { text-align: left; }
+        .breakup-table td {
+            padding: 7px 10px;
+            border-bottom: 1px solid rgba(51,65,85,0.4);
+            color: #e2e8f0;
+            text-align: right;
+        }
+        .breakup-table td:first-child { text-align: left; color: #94a3b8; }
+        .breakup-table tr:last-child td { border-bottom: none; font-weight: 600; }
+        .breakup-table tr:hover td { background: rgba(30,41,59,0.7); }
+
+        /* ── Income Tax: regime toggle ── */
+        .regime-toggle {
+            display: flex;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(99,102,241,0.3);
+        }
+        .regime-btn {
+            flex: 1;
+            padding: 9px 4px;
+            background: transparent;
+            color: #64748b;
+            border: none;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-family: 'Inter', sans-serif;
+            transition: all .2s;
+            white-space: nowrap;
+        }
+        .regime-btn.active { background: #4f46e5; color: #fff; font-weight: 600; }
+        .regime-btn:not(.active):hover { background: rgba(99,102,241,0.1); color: #818cf8; }
+
+        /* ── Tax slab table ── */
+        .tax-slab-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; margin-top: 8px; }
+        .tax-slab-table th { padding: 8px 10px; background: rgba(99,102,241,0.15); color: #818cf8; text-align: left; }
+        .tax-slab-table td { padding: 7px 10px; border-bottom: 1px solid rgba(51,65,85,0.5); color: #e2e8f0; }
+        .tax-slab-table tr:last-child td { font-weight: 700; color: #fbbf24; border-bottom: none; }
+
+        /* ── EMI principal-vs-interest bar ── */
+        .emi-split-bar { display: flex; height: 12px; border-radius: 6px; overflow: hidden; margin: 14px 0 6px; }
+        .emi-bar-p { background: #6366f1; }
+        .emi-bar-i { background: #f43f5e; }
+        .emi-legend { display: flex; gap: 16px; font-size: 0.75rem; color: #94a3b8; margin-bottom: 4px; }
+        .emi-legend span::before { content: '●'; margin-right: 4px; }
+        .emi-legend .lp::before { color: #6366f1; }
+        .emi-legend .li::before { color: #f43f5e; }
+
+        /* ── Step-up SIP comparison banner ── */
+        .stepup-compare {
+            background: rgba(132,204,22,0.08);
+            border: 1px solid rgba(132,204,22,0.25);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-top: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+        }
+        .stepup-compare .sc-label { font-size: 0.75rem; color: #94a3b8; }
+        .stepup-compare .sc-val   { font-size: 1rem;   font-weight: 700; color: #84cc16; }
+
+        /* ── Income Tax comparison cards ── */
+        .tax-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+        .tax-regime-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(51,65,85,0.8);
+            border-radius: 12px;
+            padding: 14px;
+            text-align: center;
+        }
+        .tax-regime-card.winner {
+            border-color: #4f46e5;
+            background: rgba(79,70,229,0.1);
+        }
+        .tax-regime-card .rc-label  { font-size: 0.72rem; color: #94a3b8; margin-bottom: 6px; }
+        .tax-regime-card .rc-amount { font-size: 1.2rem;  font-weight: 700; color: #e2e8f0; }
+        .tax-regime-card .rc-badge  {
+            display: inline-block;
+            background: #4f46e5;
+            color: #fff;
+            font-size: 0.62rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 20px;
+            margin-top: 6px;
         }
     </style>
 </head>
@@ -192,8 +257,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div class="flex justify-between items-center">
                 <div class="flex items-center space-x-3">
-                    <div
-                        class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-indigo-500/20">
+                    <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-indigo-500/20">
                         ₹
                     </div>
                     <div>
@@ -220,12 +284,9 @@
     <!-- Hero Section -->
     <section class="bg-slate-800/50 border-b border-slate-700">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 text-center">
-            <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">Make Informed Financial Decisions
-            </h2>
+            <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">Make Informed Financial Decisions</h2>
             <p class="text-base sm:text-lg text-slate-400 max-w-3xl mx-auto px-4">Professional-grade calculators for
                 investing, retirement planning, trading risk management, and loan analysis.</p>
-
-            <!-- PWA Install Banner (Mobile) -->
             <div id="mobileInstallBanner" class="hidden mt-6 sm:hidden">
                 <button onclick="showInstallPrompt()"
                     class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-3 rounded-full font-semibold shadow-lg shadow-indigo-500/30 active:scale-95 transition transform">
@@ -269,6 +330,26 @@
                 <button onclick="showCalculator('kvp')"
                     class="calc-tab px-3 sm:px-4 py-2 text-sm font-medium text-slate-400 hover:text-indigo-400 whitespace-nowrap transition"
                     data-calc="kvp">KVP</button>
+                <!-- ── NEW TABS ── -->
+                <button onclick="showCalculator('fd')"
+                    class="calc-tab px-3 sm:px-4 py-2 text-sm font-medium text-slate-400 hover:text-cyan-400 whitespace-nowrap transition"
+                    data-calc="fd">FD</button>
+                <button onclick="showCalculator('rd')"
+                    class="calc-tab px-3 sm:px-4 py-2 text-sm font-medium text-slate-400 hover:text-violet-400 whitespace-nowrap transition"
+                    data-calc="rd">RD</button>
+                <button onclick="showCalculator('emi')"
+                    class="calc-tab px-3 sm:px-4 py-2 text-sm font-medium text-slate-400 hover:text-rose-400 whitespace-nowrap transition"
+                    data-calc="emi">EMI</button>
+                <button onclick="showCalculator('stepupsip')"
+                    class="calc-tab px-3 sm:px-4 py-2 text-sm font-medium text-slate-400 hover:text-lime-400 whitespace-nowrap transition"
+                    data-calc="stepupsip">Step-up SIP</button>
+                <button onclick="showCalculator('nsc')"
+                    class="calc-tab px-3 sm:px-4 py-2 text-sm font-medium text-slate-400 hover:text-sky-400 whitespace-nowrap transition"
+                    data-calc="nsc">NSC</button>
+                <button onclick="showCalculator('incometax')"
+                    class="calc-tab px-3 sm:px-4 py-2 text-sm font-medium text-slate-400 hover:text-yellow-400 whitespace-nowrap transition"
+                    data-calc="incometax">Income Tax</button>
+                <!-- ── END NEW TABS ── -->
                 <button onclick="showCalculator('position')"
                     class="calc-tab px-3 sm:px-4 py-2 text-sm font-medium text-slate-400 hover:text-indigo-400 whitespace-nowrap transition"
                     data-calc="position">Position</button>
@@ -284,29 +365,24 @@
             <div class="grid md:grid-cols-2 gap-6">
                 <div class="calculator-card rounded-2xl shadow-xl p-5 sm:p-6">
                     <h3 class="text-xl sm:text-2xl font-bold mb-6 flex items-center text-white">
-                        <span
-                            class="w-8 h-8 bg-indigo-500/20 text-indigo-400 rounded-lg flex items-center justify-center mr-3 text-sm">1</span>
+                        <span class="w-8 h-8 bg-indigo-500/20 text-indigo-400 rounded-lg flex items-center justify-center mr-3 text-sm">1</span>
                         CAGR Calculator
                     </h3>
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-slate-300 mb-1">Initial Investment (₹)</label>
-                            <input type="number" id="cagr-initial" class="input-field w-full px-4 py-3 rounded-lg"
-                                placeholder="100000" value="100000">
+                            <input type="number" id="cagr-initial" class="input-field w-full px-4 py-3 rounded-lg" placeholder="100000" value="100000">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-slate-300 mb-1">Final Value (₹)</label>
-                            <input type="number" id="cagr-final" class="input-field w-full px-4 py-3 rounded-lg"
-                                placeholder="200000" value="200000">
+                            <input type="number" id="cagr-final" class="input-field w-full px-4 py-3 rounded-lg" placeholder="200000" value="200000">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-slate-300 mb-1">Duration (Years)</label>
-                            <input type="number" id="cagr-years" class="input-field w-full px-4 py-3 rounded-lg"
-                                placeholder="5" value="5">
+                            <input type="number" id="cagr-years" class="input-field w-full px-4 py-3 rounded-lg" placeholder="5" value="5">
                         </div>
                         <button onclick="calculateCAGR()"
-                            class="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition transform active:scale-95 shadow-lg shadow-indigo-600/20">Calculate
-                            CAGR</button>
+                            class="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition transform active:scale-95 shadow-lg shadow-indigo-600/20">Calculate CAGR</button>
                     </div>
                 </div>
                 <div class="space-y-4">
@@ -327,9 +403,7 @@
                     </div>
                     <div class="calculator-card rounded-2xl shadow-lg p-5 sm:p-6">
                         <h4 class="font-semibold mb-3 text-slate-200">What is CAGR?</h4>
-                        <p class="text-slate-400 text-sm leading-relaxed">Compound Annual Growth Rate measures the mean
-                            annual growth rate of an investment over a specified time period. It represents one of the
-                            most accurate ways to calculate returns.</p>
+                        <p class="text-slate-400 text-sm leading-relaxed">Compound Annual Growth Rate measures the mean annual growth rate of an investment over a specified time period. It represents one of the most accurate ways to calculate returns.</p>
                     </div>
                 </div>
             </div>
@@ -340,48 +414,31 @@
             <div class="grid md:grid-cols-2 gap-6">
                 <div class="calculator-card rounded-2xl shadow-xl p-5 sm:p-6">
                     <h3 class="text-xl sm:text-2xl font-bold mb-6 flex items-center text-white">
-                        <span
-                            class="w-8 h-8 bg-emerald-500/20 text-emerald-400 rounded-lg flex items-center justify-center mr-3 text-sm">2</span>
+                        <span class="w-8 h-8 bg-emerald-500/20 text-emerald-400 rounded-lg flex items-center justify-center mr-3 text-sm">2</span>
                         SIP Calculator
                     </h3>
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-slate-300 mb-1">Monthly Investment (₹)</label>
-                            <input type="number" id="sip-amount" class="input-field w-full px-4 py-3 rounded-lg mb-2"
-                                placeholder="5000" value="5000"
-                                oninput="updateSlider('sip-amount', 'sip-amount-slider')">
-                            <input type="range" id="sip-amount-slider"
-                                class="w-full accent-emerald-500 h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer"
-                                min="500" max="100000" step="500" value="5000"
-                                oninput="updateInput('sip-amount', 'sip-amount-slider')">
+                            <input type="number" id="sip-amount" class="input-field w-full px-4 py-3 rounded-lg mb-2" placeholder="5000" value="5000" oninput="updateSlider('sip-amount','sip-amount-slider')">
+                            <input type="range" id="sip-amount-slider" class="w-full accent-emerald-500 h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer" min="500" max="100000" step="500" value="5000" oninput="updateInput('sip-amount','sip-amount-slider')">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-slate-300 mb-1">Expected Return Rate (%
-                                p.a.)</label>
-                            <input type="number" id="sip-rate" class="input-field w-full px-4 py-3 rounded-lg mb-2"
-                                placeholder="12" value="12" oninput="updateSlider('sip-rate', 'sip-rate-slider')">
-                            <input type="range" id="sip-rate-slider"
-                                class="w-full accent-emerald-500 h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer"
-                                min="1" max="30" step="0.5" value="12"
-                                oninput="updateInput('sip-rate', 'sip-rate-slider')">
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Expected Return Rate (% p.a.)</label>
+                            <input type="number" id="sip-rate" class="input-field w-full px-4 py-3 rounded-lg mb-2" placeholder="12" value="12" oninput="updateSlider('sip-rate','sip-rate-slider')">
+                            <input type="range" id="sip-rate-slider" class="w-full accent-emerald-500 h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer" min="1" max="30" step="0.5" value="12" oninput="updateInput('sip-rate','sip-rate-slider')">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-slate-300 mb-1">Time Period (Years)</label>
-                            <input type="number" id="sip-years" class="input-field w-full px-4 py-3 rounded-lg mb-2"
-                                placeholder="10" value="10" oninput="updateSlider('sip-years', 'sip-years-slider')">
-                            <input type="range" id="sip-years-slider"
-                                class="w-full accent-emerald-500 h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer"
-                                min="1" max="40" step="1" value="10"
-                                oninput="updateInput('sip-years', 'sip-years-slider')">
+                            <input type="number" id="sip-years" class="input-field w-full px-4 py-3 rounded-lg mb-2" placeholder="10" value="10" oninput="updateSlider('sip-years','sip-years-slider')">
+                            <input type="range" id="sip-years-slider" class="w-full accent-emerald-500 h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer" min="1" max="40" step="1" value="10" oninput="updateInput('sip-years','sip-years-slider')">
                         </div>
                         <button onclick="calculateSIP()"
-                            class="w-full bg-emerald-600 text-white py-3 rounded-lg font-semibold hover:bg-emerald-700 transition transform active:scale-95 shadow-lg shadow-emerald-600/20">Calculate
-                            SIP Returns</button>
+                            class="w-full bg-emerald-600 text-white py-3 rounded-lg font-semibold hover:bg-emerald-700 transition transform active:scale-95 shadow-lg shadow-emerald-600/20">Calculate SIP Returns</button>
                     </div>
                 </div>
                 <div class="space-y-4">
-                    <div id="sip-result"
-                        class="bg-gradient-to-br from-emerald-600 to-teal-600 rounded-2xl shadow-xl p-5 sm:p-6 text-white hidden">
+                    <div id="sip-result" class="bg-gradient-to-br from-emerald-600 to-teal-600 rounded-2xl shadow-xl p-5 sm:p-6 text-white hidden">
                         <h4 class="text-lg font-semibold mb-4 opacity-90">Projected Returns</h4>
                         <div class="text-3xl font-bold mb-1" id="sip-total">₹0</div>
                         <p class="text-emerald-100 text-sm mb-4">Total Corpus</p>
@@ -405,10 +462,7 @@
                     </div>
                     <div class="calculator-card rounded-2xl shadow-lg p-5 sm:p-6">
                         <h4 class="font-semibold mb-3 text-slate-200">What is SIP?</h4>
-                        <p class="text-slate-400 text-sm leading-relaxed">Systematic Investment Plan (SIP) is a method
-                            of
-                            investing a fixed sum of money at regular intervals in mutual funds. It helps in rupee cost
-                            averaging and builds the habit of disciplined saving.</p>
+                        <p class="text-slate-400 text-sm leading-relaxed">Systematic Investment Plan (SIP) is a method of investing a fixed sum of money at regular intervals in mutual funds. It helps in rupee cost averaging and builds the habit of disciplined saving.</p>
                     </div>
                 </div>
             </div>
@@ -419,35 +473,28 @@
             <div class="grid md:grid-cols-2 gap-6">
                 <div class="calculator-card rounded-2xl shadow-xl p-5 sm:p-6">
                     <h3 class="text-xl sm:text-2xl font-bold mb-6 flex items-center text-white">
-                        <span
-                            class="w-8 h-8 bg-purple-500/20 text-purple-400 rounded-lg flex items-center justify-center mr-3 text-sm">3</span>
+                        <span class="w-8 h-8 bg-purple-500/20 text-purple-400 rounded-lg flex items-center justify-center mr-3 text-sm">3</span>
                         Lumpsum Calculator
                     </h3>
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-slate-300 mb-1">Investment Amount (₹)</label>
-                            <input type="number" id="lump-amount" class="input-field w-full px-4 py-3 rounded-lg"
-                                placeholder="100000" value="100000">
+                            <input type="number" id="lump-amount" class="input-field w-full px-4 py-3 rounded-lg" placeholder="100000" value="100000">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-slate-300 mb-1">Expected Return Rate (%
-                                p.a.)</label>
-                            <input type="number" id="lump-rate" class="input-field w-full px-4 py-3 rounded-lg"
-                                placeholder="12" value="12">
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Expected Return Rate (% p.a.)</label>
+                            <input type="number" id="lump-rate" class="input-field w-full px-4 py-3 rounded-lg" placeholder="12" value="12">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-slate-300 mb-1">Time Period (Years)</label>
-                            <input type="number" id="lump-years" class="input-field w-full px-4 py-3 rounded-lg"
-                                placeholder="10" value="10">
+                            <input type="number" id="lump-years" class="input-field w-full px-4 py-3 rounded-lg" placeholder="10" value="10">
                         </div>
                         <button onclick="calculateLumpsum()"
-                            class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition transform active:scale-95 shadow-lg shadow-purple-600/20">Calculate
-                            Returns</button>
+                            class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition transform active:scale-95 shadow-lg shadow-purple-600/20">Calculate Returns</button>
                     </div>
                 </div>
                 <div class="space-y-4">
-                    <div id="lump-result"
-                        class="bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl shadow-xl p-5 sm:p-6 text-white hidden">
+                    <div id="lump-result" class="bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl shadow-xl p-5 sm:p-6 text-white hidden">
                         <h4 class="text-lg font-semibold mb-4 opacity-90">Future Value</h4>
                         <div class="text-3xl font-bold mb-1" id="lump-total">₹0</div>
                         <p class="text-purple-100 text-sm mb-4">Total Corpus</p>
@@ -471,9 +518,7 @@
                     </div>
                     <div class="calculator-card rounded-2xl shadow-lg p-5 sm:p-6">
                         <h4 class="font-semibold mb-3 text-slate-200">What is Lumpsum?</h4>
-                        <p class="text-slate-400 text-sm leading-relaxed">Lumpsum investing involves putting a large sum
-                            of money into an investment all at once. It is ideal when you have a significant amount of
-                            idle cash and expect the market to trend upwards.</p>
+                        <p class="text-slate-400 text-sm leading-relaxed">Lumpsum investing involves putting a large sum of money into an investment all at once. It is ideal when you have a significant amount of idle cash and expect the market to trend upwards.</p>
                     </div>
                 </div>
             </div>
@@ -484,35 +529,28 @@
             <div class="grid md:grid-cols-2 gap-6">
                 <div class="calculator-card rounded-2xl shadow-xl p-5 sm:p-6">
                     <h3 class="text-xl sm:text-2xl font-bold mb-6 flex items-center text-white">
-                        <span
-                            class="w-8 h-8 bg-orange-500/20 text-orange-400 rounded-lg flex items-center justify-center mr-3 text-sm">4</span>
+                        <span class="w-8 h-8 bg-orange-500/20 text-orange-400 rounded-lg flex items-center justify-center mr-3 text-sm">4</span>
                         Goal-based SIP
                     </h3>
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-slate-300 mb-1">Target Amount (₹)</label>
-                            <input type="number" id="goal-sip-target" class="input-field w-full px-4 py-3 rounded-lg"
-                                placeholder="1000000" value="1000000">
+                            <input type="number" id="goal-sip-target" class="input-field w-full px-4 py-3 rounded-lg" placeholder="1000000" value="1000000">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-slate-300 mb-1">Expected Return Rate (%
-                                p.a.)</label>
-                            <input type="number" id="goal-sip-rate" class="input-field w-full px-4 py-3 rounded-lg"
-                                placeholder="12" value="12">
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Expected Return Rate (% p.a.)</label>
+                            <input type="number" id="goal-sip-rate" class="input-field w-full px-4 py-3 rounded-lg" placeholder="12" value="12">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-slate-300 mb-1">Time Period (Years)</label>
-                            <input type="number" id="goal-sip-years" class="input-field w-full px-4 py-3 rounded-lg"
-                                placeholder="10" value="10">
+                            <input type="number" id="goal-sip-years" class="input-field w-full px-4 py-3 rounded-lg" placeholder="10" value="10">
                         </div>
                         <button onclick="calculateGoalSIP()"
-                            class="w-full bg-orange-600 text-white py-3 rounded-lg font-semibold hover:bg-orange-700 transition transform active:scale-95 shadow-lg shadow-orange-600/20">Calculate
-                            Required SIP</button>
+                            class="w-full bg-orange-600 text-white py-3 rounded-lg font-semibold hover:bg-orange-700 transition transform active:scale-95 shadow-lg shadow-orange-600/20">Calculate Required SIP</button>
                     </div>
                 </div>
                 <div class="space-y-4">
-                    <div id="goal-sip-result"
-                        class="bg-gradient-to-br from-orange-600 to-red-600 rounded-2xl shadow-xl p-5 sm:p-6 text-white hidden">
+                    <div id="goal-sip-result" class="bg-gradient-to-br from-orange-600 to-red-600 rounded-2xl shadow-xl p-5 sm:p-6 text-white hidden">
                         <h4 class="text-lg font-semibold mb-4 opacity-90">Required Monthly Investment</h4>
                         <div class="text-3xl font-bold mb-1" id="goal-sip-amount">₹0</div>
                         <p class="text-orange-100 text-sm mb-4">per month</p>
@@ -533,17 +571,12 @@
                     </div>
                     <div class="calculator-card rounded-2xl shadow-lg p-5 sm:p-6">
                         <h4 class="font-semibold mb-3 text-slate-200">What is Goal-based SIP?</h4>
-                        <p class="text-slate-400 text-sm leading-relaxed mb-4">Goal-based SIP helps you calculate the
-                            exact monthly investment required to reach a specific financial target in a defined time
-                            frame, considering expected returns.</p>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-4">Goal-based SIP helps you calculate the exact monthly investment required to reach a specific financial target in a defined time frame, considering expected returns.</p>
                         <h4 class="font-semibold mb-3 text-slate-200">Strategy Tips</h4>
                         <ul class="space-y-2 text-sm text-slate-400">
-                            <li class="flex items-start"><span class="text-orange-400 mr-2">•</span>Start early to
-                                benefit from compounding</li>
-                            <li class="flex items-start"><span class="text-orange-400 mr-2">•</span>Increase SIP amount
-                                annually by 10%</li>
-                            <li class="flex items-start"><span class="text-orange-400 mr-2">•</span>Review and rebalance
-                                portfolio periodically</li>
+                            <li class="flex items-start"><span class="text-orange-400 mr-2">•</span>Start early to benefit from compounding</li>
+                            <li class="flex items-start"><span class="text-orange-400 mr-2">•</span>Increase SIP amount annually by 10%</li>
+                            <li class="flex items-start"><span class="text-orange-400 mr-2">•</span>Review and rebalance portfolio periodically</li>
                         </ul>
                     </div>
                 </div>
@@ -555,35 +588,28 @@
             <div class="grid md:grid-cols-2 gap-6">
                 <div class="calculator-card rounded-2xl shadow-xl p-5 sm:p-6">
                     <h3 class="text-xl sm:text-2xl font-bold mb-6 flex items-center text-white">
-                        <span
-                            class="w-8 h-8 bg-indigo-500/20 text-indigo-400 rounded-lg flex items-center justify-center mr-3 text-sm">5</span>
+                        <span class="w-8 h-8 bg-indigo-500/20 text-indigo-400 rounded-lg flex items-center justify-center mr-3 text-sm">5</span>
                         Goal-based Lumpsum
                     </h3>
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-slate-300 mb-1">Target Amount (₹)</label>
-                            <input type="number" id="goal-lump-target" class="input-field w-full px-4 py-3 rounded-lg"
-                                placeholder="1000000" value="1000000">
+                            <input type="number" id="goal-lump-target" class="input-field w-full px-4 py-3 rounded-lg" placeholder="1000000" value="1000000">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-slate-300 mb-1">Expected Return Rate (%
-                                p.a.)</label>
-                            <input type="number" id="goal-lump-rate" class="input-field w-full px-4 py-3 rounded-lg"
-                                placeholder="12" value="12">
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Expected Return Rate (% p.a.)</label>
+                            <input type="number" id="goal-lump-rate" class="input-field w-full px-4 py-3 rounded-lg" placeholder="12" value="12">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-slate-300 mb-1">Time Period (Years)</label>
-                            <input type="number" id="goal-lump-years" class="input-field w-full px-4 py-3 rounded-lg"
-                                placeholder="10" value="10">
+                            <input type="number" id="goal-lump-years" class="input-field w-full px-4 py-3 rounded-lg" placeholder="10" value="10">
                         </div>
                         <button onclick="calculateGoalLumpsum()"
-                            class="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition transform active:scale-95 shadow-lg shadow-indigo-600/20">Calculate
-                            Required Investment</button>
+                            class="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition transform active:scale-95 shadow-lg shadow-indigo-600/20">Calculate Required Investment</button>
                     </div>
                 </div>
                 <div class="space-y-4">
-                    <div id="goal-lump-result"
-                        class="bg-gradient-to-br from-indigo-600 to-blue-600 rounded-2xl shadow-xl p-5 sm:p-6 text-white hidden">
+                    <div id="goal-lump-result" class="bg-gradient-to-br from-indigo-600 to-blue-600 rounded-2xl shadow-xl p-5 sm:p-6 text-white hidden">
                         <h4 class="text-lg font-semibold mb-4 opacity-90">Required Lumpsum Investment</h4>
                         <div class="text-3xl font-bold mb-1" id="goal-lump-amount">₹0</div>
                         <p class="text-indigo-100 text-sm mb-4">invest today</p>
@@ -604,9 +630,7 @@
                     </div>
                     <div class="calculator-card rounded-2xl shadow-lg p-5 sm:p-6">
                         <h4 class="font-semibold mb-3 text-slate-200">Goal-based Lumpsum</h4>
-                        <p class="text-slate-400 text-sm leading-relaxed">This calculator helps you determine how much
-                            you need to invest today to reach a specific financial goal in the future, based on expected
-                            returns and time duration.</p>
+                        <p class="text-slate-400 text-sm leading-relaxed">This calculator helps you determine how much you need to invest today to reach a specific financial goal in the future, based on expected returns and time duration.</p>
                     </div>
                 </div>
             </div>
@@ -617,53 +641,42 @@
             <div class="grid md:grid-cols-2 gap-6">
                 <div class="calculator-card rounded-2xl shadow-xl p-5 sm:p-6">
                     <h3 class="text-xl sm:text-2xl font-bold mb-6 flex items-center text-white">
-                        <span
-                            class="w-8 h-8 bg-teal-500/20 text-teal-400 rounded-lg flex items-center justify-center mr-3 text-sm">6</span>
+                        <span class="w-8 h-8 bg-teal-500/20 text-teal-400 rounded-lg flex items-center justify-center mr-3 text-sm">6</span>
                         Retirement Planning
                     </h3>
                     <div class="space-y-4">
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-slate-300 mb-1">Current Age</label>
-                                <input type="number" id="retire-current-age"
-                                    class="input-field w-full px-4 py-3 rounded-lg" placeholder="30" value="30">
+                                <input type="number" id="retire-current-age" class="input-field w-full px-4 py-3 rounded-lg" placeholder="30" value="30">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-slate-300 mb-1">Retirement Age</label>
-                                <input type="number" id="retire-age" class="input-field w-full px-4 py-3 rounded-lg"
-                                    placeholder="60" value="60">
+                                <input type="number" id="retire-age" class="input-field w-full px-4 py-3 rounded-lg" placeholder="60" value="60">
                             </div>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-slate-300 mb-1">Monthly Expenses (Current)
-                                (₹)</label>
-                            <input type="number" id="retire-expenses" class="input-field w-full px-4 py-3 rounded-lg"
-                                placeholder="50000" value="50000">
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Monthly Expenses (Current) (₹)</label>
+                            <input type="number" id="retire-expenses" class="input-field w-full px-4 py-3 rounded-lg" placeholder="50000" value="50000">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-slate-300 mb-1">Expected Inflation (%)</label>
-                            <input type="number" id="retire-inflation" class="input-field w-full px-4 py-3 rounded-lg"
-                                placeholder="6" value="6">
+                            <input type="number" id="retire-inflation" class="input-field w-full px-4 py-3 rounded-lg" placeholder="6" value="6">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-slate-300 mb-1">Post-retirement Return
-                                (%)</label>
-                            <input type="number" id="retire-return" class="input-field w-full px-4 py-3 rounded-lg"
-                                placeholder="8" value="8">
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Post-retirement Return (%)</label>
+                            <input type="number" id="retire-return" class="input-field w-full px-4 py-3 rounded-lg" placeholder="8" value="8">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-slate-300 mb-1">Life Expectancy (Years)</label>
-                            <input type="number" id="retire-life" class="input-field w-full px-4 py-3 rounded-lg"
-                                placeholder="85" value="85">
+                            <input type="number" id="retire-life" class="input-field w-full px-4 py-3 rounded-lg" placeholder="85" value="85">
                         </div>
                         <button onclick="calculateRetirement()"
-                            class="w-full bg-teal-600 text-white py-3 rounded-lg font-semibold hover:bg-teal-700 transition transform active:scale-95 shadow-lg shadow-teal-600/20">Calculate
-                            Retirement Corpus</button>
+                            class="w-full bg-teal-600 text-white py-3 rounded-lg font-semibold hover:bg-teal-700 transition transform active:scale-95 shadow-lg shadow-teal-600/20">Calculate Retirement Corpus</button>
                     </div>
                 </div>
                 <div class="space-y-4">
-                    <div id="retire-result"
-                        class="bg-gradient-to-br from-teal-600 to-cyan-600 rounded-2xl shadow-xl p-5 sm:p-6 text-white hidden">
+                    <div id="retire-result" class="bg-gradient-to-br from-teal-600 to-cyan-600 rounded-2xl shadow-xl p-5 sm:p-6 text-white hidden">
                         <h4 class="text-lg font-semibold mb-4 opacity-90">Retirement Analysis</h4>
                         <div class="space-y-4">
                             <div class="bg-white/10 rounded-lg p-3">
@@ -691,9 +704,7 @@
                     </div>
                     <div class="calculator-card rounded-2xl shadow-lg p-5 sm:p-6">
                         <h4 class="font-semibold mb-3 text-slate-200">Retirement Planning</h4>
-                        <p class="text-slate-400 text-sm leading-relaxed">Determine the corpus needed to maintain your
-                            lifestyle after retirement. This calculation accounts for inflation and life expectancy to
-                            ensure you don't outlive your savings.</p>
+                        <p class="text-slate-400 text-sm leading-relaxed">Determine the corpus needed to maintain your lifestyle after retirement. This calculation accounts for inflation and life expectancy to ensure you don't outlive your savings.</p>
                     </div>
                 </div>
             </div>
@@ -704,41 +715,32 @@
             <div class="grid md:grid-cols-2 gap-6">
                 <div class="calculator-card rounded-2xl shadow-xl p-5 sm:p-6">
                     <h3 class="text-xl sm:text-2xl font-bold mb-6 flex items-center text-white">
-                        <span
-                            class="w-8 h-8 bg-pink-500/20 text-pink-400 rounded-lg flex items-center justify-center mr-3 text-sm">7</span>
+                        <span class="w-8 h-8 bg-pink-500/20 text-pink-400 rounded-lg flex items-center justify-center mr-3 text-sm">7</span>
                         Systematic Withdrawal Plan
                     </h3>
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-slate-300 mb-1">Total Investment (₹)</label>
-                            <input type="number" id="swp-amount" class="input-field w-full px-4 py-3 rounded-lg"
-                                placeholder="1000000" value="1000000">
+                            <input type="number" id="swp-amount" class="input-field w-full px-4 py-3 rounded-lg" placeholder="1000000" value="1000000">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-slate-300 mb-1">Monthly Withdrawal (₹)</label>
-                            <input type="number" id="swp-withdrawal" class="input-field w-full px-4 py-3 rounded-lg"
-                                placeholder="10000" value="10000">
+                            <input type="number" id="swp-withdrawal" class="input-field w-full px-4 py-3 rounded-lg" placeholder="10000" value="10000">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-slate-300 mb-1">Expected Return Rate (%
-                                p.a.)</label>
-                            <input type="number" id="swp-rate" class="input-field w-full px-4 py-3 rounded-lg"
-                                placeholder="8" value="8">
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Expected Return Rate (% p.a.)</label>
+                            <input type="number" id="swp-rate" class="input-field w-full px-4 py-3 rounded-lg" placeholder="8" value="8">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-slate-300 mb-1">Withdrawal Period
-                                (Years)</label>
-                            <input type="number" id="swp-years" class="input-field w-full px-4 py-3 rounded-lg"
-                                placeholder="20" value="20">
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Withdrawal Period (Years)</label>
+                            <input type="number" id="swp-years" class="input-field w-full px-4 py-3 rounded-lg" placeholder="20" value="20">
                         </div>
                         <button onclick="calculateSWP()"
-                            class="w-full bg-pink-600 text-white py-3 rounded-lg font-semibold hover:bg-pink-700 transition transform active:scale-95 shadow-lg shadow-pink-600/20">Calculate
-                            SWP</button>
+                            class="w-full bg-pink-600 text-white py-3 rounded-lg font-semibold hover:bg-pink-700 transition transform active:scale-95 shadow-lg shadow-pink-600/20">Calculate SWP</button>
                     </div>
                 </div>
                 <div class="space-y-4">
-                    <div id="swp-result"
-                        class="bg-gradient-to-br from-pink-600 to-rose-600 rounded-2xl shadow-xl p-5 sm:p-6 text-white hidden">
+                    <div id="swp-result" class="bg-gradient-to-br from-pink-600 to-rose-600 rounded-2xl shadow-xl p-5 sm:p-6 text-white hidden">
                         <h4 class="text-lg font-semibold mb-4 opacity-90">SWP Analysis</h4>
                         <div class="space-y-3">
                             <div class="flex justify-between border-b border-white/20 pb-2">
@@ -759,8 +761,7 @@
                             </div>
                         </div>
                     </div>
-                    <div id="swp-table-card"
-                        class="calculator-card rounded-2xl shadow-lg p-4 overflow-x-auto max-h-96 overflow-y-auto hidden">
+                    <div id="swp-table-card" class="calculator-card rounded-2xl shadow-lg p-4 overflow-x-auto max-h-96 overflow-y-auto hidden">
                         <table class="w-full text-sm">
                             <thead class="bg-slate-800 sticky top-0">
                                 <tr>
@@ -774,9 +775,7 @@
                     </div>
                     <div class="calculator-card rounded-2xl shadow-lg p-5 sm:p-6">
                         <h4 class="font-semibold mb-3 text-slate-200">What is SWP?</h4>
-                        <p class="text-slate-400 text-sm leading-relaxed">Systematic Withdrawal Plan (SWP) allows you to
-                            withdraw a fixed amount from your investment at regular intervals, providing a steady income
-                            while the remaining capital continues to grow.</p>
+                        <p class="text-slate-400 text-sm leading-relaxed">Systematic Withdrawal Plan (SWP) allows you to withdraw a fixed amount from your investment at regular intervals, providing a steady income while the remaining capital continues to grow.</p>
                     </div>
                 </div>
             </div>
@@ -787,30 +786,24 @@
             <div class="grid md:grid-cols-2 gap-6">
                 <div class="calculator-card rounded-2xl shadow-xl p-5 sm:p-6">
                     <h3 class="text-xl sm:text-2xl font-bold mb-6 flex items-center text-white">
-                        <span
-                            class="w-8 h-8 bg-blue-500/20 text-blue-400 rounded-lg flex items-center justify-center mr-3 text-sm">9</span>
+                        <span class="w-8 h-8 bg-blue-500/20 text-blue-400 rounded-lg flex items-center justify-center mr-3 text-sm">9</span>
                         PPF Calculator
                     </h3>
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-slate-300 mb-1">Annual Investment (₹)</label>
-                            <input type="number" id="ppf-amount" class="input-field w-full px-4 py-3 rounded-lg"
-                                placeholder="150000" value="150000">
+                            <input type="number" id="ppf-amount" class="input-field w-full px-4 py-3 rounded-lg" placeholder="150000" value="150000">
                         </div>
                         <div class="bg-slate-700/30 p-3 rounded-lg border border-slate-600">
-                            <p class="text-xs text-slate-400">Current Interest Rate: <span
-                                    class="text-blue-400 font-semibold">7.1% p.a.</span></p>
-                            <p class="text-xs text-slate-400">Lock-in Period: <span
-                                    class="text-blue-400 font-semibold">15 Years</span></p>
+                            <p class="text-xs text-slate-400">Current Interest Rate: <span class="text-blue-400 font-semibold">7.1% p.a.</span></p>
+                            <p class="text-xs text-slate-400">Lock-in Period: <span class="text-blue-400 font-semibold">15 Years</span></p>
                         </div>
                         <button onclick="calculatePPF()"
-                            class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition transform active:scale-95 shadow-lg shadow-blue-600/20">Calculate
-                            PPF Returns</button>
+                            class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition transform active:scale-95 shadow-lg shadow-blue-600/20">Calculate PPF Returns</button>
                     </div>
                 </div>
                 <div class="space-y-4">
-                    <div id="ppf-result"
-                        class="bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl shadow-xl p-5 sm:p-6 text-white hidden">
+                    <div id="ppf-result" class="bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl shadow-xl p-5 sm:p-6 text-white hidden">
                         <h4 class="text-lg font-semibold mb-4 opacity-90">Maturity Analysis</h4>
                         <div class="text-3xl font-bold mb-1" id="ppf-total">₹0</div>
                         <p class="text-blue-100 text-sm mb-4">Maturity Value (15 Years)</p>
@@ -827,9 +820,7 @@
                     </div>
                     <div class="calculator-card rounded-2xl shadow-lg p-5 sm:p-6">
                         <h4 class="font-semibold mb-3 text-slate-200">What is PPF?</h4>
-                        <p class="text-slate-400 text-sm leading-relaxed">Public Provident Fund (PPF) is a popular
-                            long-term savings scheme in India, offering tax-free returns and safety. It has a mandatory
-                            lock-in period of 15 years.</p>
+                        <p class="text-slate-400 text-sm leading-relaxed">Public Provident Fund (PPF) is a popular long-term savings scheme in India, offering tax-free returns and safety. It has a mandatory lock-in period of 15 years.</p>
                     </div>
                 </div>
             </div>
@@ -840,31 +831,24 @@
             <div class="grid md:grid-cols-2 gap-6">
                 <div class="calculator-card rounded-2xl shadow-xl p-5 sm:p-6">
                     <h3 class="text-xl sm:text-2xl font-bold mb-6 flex items-center text-white">
-                        <span
-                            class="w-8 h-8 bg-pink-500/20 text-pink-400 rounded-lg flex items-center justify-center mr-3 text-sm">10</span>
+                        <span class="w-8 h-8 bg-pink-500/20 text-pink-400 rounded-lg flex items-center justify-center mr-3 text-sm">10</span>
                         SSY Calculator
                     </h3>
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-slate-300 mb-1">Annual Investment (₹)</label>
-                            <input type="number" id="ssy-amount" class="input-field w-full px-4 py-3 rounded-lg"
-                                placeholder="150000" value="150000">
+                            <input type="number" id="ssy-amount" class="input-field w-full px-4 py-3 rounded-lg" placeholder="150000" value="150000">
                         </div>
                         <div class="bg-slate-700/30 p-3 rounded-lg border border-slate-600">
-                            <p class="text-xs text-slate-400">Current Interest Rate: <span
-                                    class="text-pink-400 font-semibold">8.2% p.a.</span></p>
-                            <p class="text-xs text-slate-400">Contribution: <span class="text-pink-400 font-semibold">15
-                                    Years</span> | Maturity: <span class="text-pink-400 font-semibold">21 Years</span>
-                            </p>
+                            <p class="text-xs text-slate-400">Current Interest Rate: <span class="text-pink-400 font-semibold">8.2% p.a.</span></p>
+                            <p class="text-xs text-slate-400">Contribution: <span class="text-pink-400 font-semibold">15 Years</span> | Maturity: <span class="text-pink-400 font-semibold">21 Years</span></p>
                         </div>
                         <button onclick="calculateSSY()"
-                            class="w-full bg-pink-600 text-white py-3 rounded-lg font-semibold hover:bg-pink-700 transition transform active:scale-95 shadow-lg shadow-pink-600/20">Calculate
-                            SSY Returns</button>
+                            class="w-full bg-pink-600 text-white py-3 rounded-lg font-semibold hover:bg-pink-700 transition transform active:scale-95 shadow-lg shadow-pink-600/20">Calculate SSY Returns</button>
                     </div>
                 </div>
                 <div class="space-y-4">
-                    <div id="ssy-result"
-                        class="bg-gradient-to-br from-pink-600 to-rose-600 rounded-2xl shadow-xl p-5 sm:p-6 text-white hidden">
+                    <div id="ssy-result" class="bg-gradient-to-br from-pink-600 to-rose-600 rounded-2xl shadow-xl p-5 sm:p-6 text-white hidden">
                         <h4 class="text-lg font-semibold mb-4 opacity-90">Maturity Analysis</h4>
                         <div class="text-3xl font-bold mb-1" id="ssy-total">₹0</div>
                         <p class="text-pink-100 text-sm mb-4">Expected Maturity (21 Years)</p>
@@ -881,9 +865,7 @@
                     </div>
                     <div class="calculator-card rounded-2xl shadow-lg p-5 sm:p-6">
                         <h4 class="font-semibold mb-3 text-slate-200">What is SSY?</h4>
-                        <p class="text-slate-400 text-sm leading-relaxed">Sukanya Samriddhi Yojana (SSY) is a
-                            government-backed saving scheme for the benefit of girl children. It offers one of the
-                            highest interest rates among small savings schemes.</p>
+                        <p class="text-slate-400 text-sm leading-relaxed">Sukanya Samriddhi Yojana (SSY) is a government-backed saving scheme for the benefit of girl children. It offers one of the highest interest rates among small savings schemes.</p>
                     </div>
                 </div>
             </div>
@@ -894,30 +876,24 @@
             <div class="grid md:grid-cols-2 gap-6">
                 <div class="calculator-card rounded-2xl shadow-xl p-5 sm:p-6">
                     <h3 class="text-xl sm:text-2xl font-bold mb-6 flex items-center text-white">
-                        <span
-                            class="w-8 h-8 bg-amber-500/20 text-amber-400 rounded-lg flex items-center justify-center mr-3 text-sm">11</span>
+                        <span class="w-8 h-8 bg-amber-500/20 text-amber-400 rounded-lg flex items-center justify-center mr-3 text-sm">11</span>
                         KVP Calculator
                     </h3>
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-slate-300 mb-1">One-time Investment (₹)</label>
-                            <input type="number" id="kvp-amount" class="input-field w-full px-4 py-3 rounded-lg"
-                                placeholder="100000" value="100000">
+                            <input type="number" id="kvp-amount" class="input-field w-full px-4 py-3 rounded-lg" placeholder="100000" value="100000">
                         </div>
                         <div class="bg-slate-700/30 p-3 rounded-lg border border-slate-600">
-                            <p class="text-xs text-slate-400">Current Interest Rate: <span
-                                    class="text-amber-400 font-semibold">7.5% p.a.</span></p>
-                            <p class="text-xs text-slate-400">Doubling Period: <span
-                                    class="text-amber-400 font-semibold">115 Months (9y 7m)</span></p>
+                            <p class="text-xs text-slate-400">Current Interest Rate: <span class="text-amber-400 font-semibold">7.5% p.a.</span></p>
+                            <p class="text-xs text-slate-400">Doubling Period: <span class="text-amber-400 font-semibold">115 Months (9y 7m)</span></p>
                         </div>
                         <button onclick="calculateKVP()"
-                            class="w-full bg-amber-600 text-white py-3 rounded-lg font-semibold hover:bg-amber-700 transition transform active:scale-95 shadow-lg shadow-amber-600/20">Calculate
-                            KVP Maturity</button>
+                            class="w-full bg-amber-600 text-white py-3 rounded-lg font-semibold hover:bg-amber-700 transition transform active:scale-95 shadow-lg shadow-amber-600/20">Calculate KVP Maturity</button>
                     </div>
                 </div>
                 <div class="space-y-4">
-                    <div id="kvp-result"
-                        class="bg-gradient-to-br from-amber-600 to-orange-600 rounded-2xl shadow-xl p-5 sm:p-6 text-white hidden">
+                    <div id="kvp-result" class="bg-gradient-to-br from-amber-600 to-orange-600 rounded-2xl shadow-xl p-5 sm:p-6 text-white hidden">
                         <h4 class="text-lg font-semibold mb-4 opacity-90">Maturity Analysis</h4>
                         <div class="text-3xl font-bold mb-1" id="kvp-total">₹0</div>
                         <p class="text-amber-100 text-sm mb-4">Value after 115 Months</p>
@@ -934,9 +910,486 @@
                     </div>
                     <div class="calculator-card rounded-2xl shadow-lg p-5 sm:p-6">
                         <h4 class="font-semibold mb-3 text-slate-200">What is KVP?</h4>
-                        <p class="text-slate-400 text-sm leading-relaxed">Kisan Vikas Patra (KVP) is a certificate-based
-                            savings scheme that doubles your investment over a fixed period, as determined by the
-                            prevailing interest rate.</p>
+                        <p class="text-slate-400 text-sm leading-relaxed">Kisan Vikas Patra (KVP) is a certificate-based savings scheme that doubles your investment over a fixed period, as determined by the prevailing interest rate.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ════════════════════════════════════════════════════════════ -->
+        <!-- 12 — FD CALCULATOR                                          -->
+        <!-- ════════════════════════════════════════════════════════════ -->
+        <div id="fd-calc" class="calculator-section hidden smooth-fade">
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="calculator-card rounded-2xl shadow-xl p-5 sm:p-6">
+                    <h3 class="text-xl sm:text-2xl font-bold mb-6 flex items-center text-white">
+                        <span class="w-8 h-8 bg-cyan-500/20 text-cyan-400 rounded-lg flex items-center justify-center mr-3 text-sm">12</span>
+                        FD Calculator
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Principal Amount (₹)</label>
+                            <input type="number" id="fd-principal" class="input-field w-full px-4 py-3 rounded-lg" placeholder="100000">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Annual Interest Rate (%)</label>
+                            <input type="number" id="fd-rate" class="input-field w-full px-4 py-3 rounded-lg" placeholder="7.0" step="0.1">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Tenure</label>
+                            <div class="flex gap-3">
+                                <input type="number" id="fd-tenure" class="input-field px-4 py-3 rounded-lg" style="flex:2" placeholder="2">
+                                <select id="fd-tenure-unit" class="input-field px-3 py-3 rounded-lg" style="flex:1">
+                                    <option value="years">Years</option>
+                                    <option value="months">Months</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Compounding Frequency</label>
+                            <select id="fd-compound" class="input-field w-full px-4 py-3 rounded-lg">
+                                <option value="4">Quarterly (Standard)</option>
+                                <option value="12">Monthly</option>
+                                <option value="2">Half-Yearly</option>
+                                <option value="1">Annually</option>
+                            </select>
+                        </div>
+                        <button onclick="calculateFD()"
+                            class="w-full bg-cyan-600 text-white py-3 rounded-lg font-semibold hover:bg-cyan-700 transition transform active:scale-95 shadow-lg shadow-cyan-600/20">Calculate FD Maturity</button>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div id="fd-result" class="bg-gradient-to-br from-cyan-600 to-teal-600 rounded-2xl shadow-xl p-5 sm:p-6 text-white hidden">
+                        <h4 class="text-lg font-semibold mb-4 opacity-90">Maturity Analysis</h4>
+                        <div class="text-3xl font-bold mb-1" id="fd-maturity">₹0</div>
+                        <p class="text-cyan-100 text-sm mb-4">Maturity Value</p>
+                        <div class="space-y-3">
+                            <div class="flex justify-between border-b border-white/20 pb-2">
+                                <span class="opacity-75">Principal</span>
+                                <span class="font-semibold" id="fd-principal-out">₹0</span>
+                            </div>
+                            <div class="flex justify-between border-b border-white/20 pb-2">
+                                <span class="opacity-75">Total Interest</span>
+                                <span class="font-semibold" id="fd-interest-out">₹0</span>
+                            </div>
+                            <div class="flex justify-between border-b border-white/20 pb-2">
+                                <span class="opacity-75">Effective Annual Yield</span>
+                                <span class="font-semibold text-yellow-300" id="fd-yield">0%</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="opacity-75">Absolute Return</span>
+                                <span class="font-semibold text-yellow-300" id="fd-abs-return">0%</span>
+                            </div>
+                        </div>
+                        <div class="breakup-wrap">
+                            <table class="breakup-table">
+                                <thead><tr><th>Period</th><th>Interest</th><th>Cumul. Interest</th><th>Balance</th></tr></thead>
+                                <tbody id="fd-table-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="calculator-card rounded-2xl shadow-lg p-5 sm:p-6">
+                        <h4 class="font-semibold mb-3 text-slate-200">What is FD?</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed">A Fixed Deposit (FD) is a financial instrument offered by banks where you deposit a lump sum for a fixed tenure at a guaranteed interest rate. Returns are predictable and the principal is safe. Interest is typically compounded quarterly in India.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ════════════════════════════════════════════════════════════ -->
+        <!-- 13 — RD CALCULATOR                                          -->
+        <!-- ════════════════════════════════════════════════════════════ -->
+        <div id="rd-calc" class="calculator-section hidden smooth-fade">
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="calculator-card rounded-2xl shadow-xl p-5 sm:p-6">
+                    <h3 class="text-xl sm:text-2xl font-bold mb-6 flex items-center text-white">
+                        <span class="w-8 h-8 bg-violet-500/20 text-violet-400 rounded-lg flex items-center justify-center mr-3 text-sm">13</span>
+                        RD Calculator
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Monthly Deposit (₹)</label>
+                            <input type="number" id="rd-monthly" class="input-field w-full px-4 py-3 rounded-lg" placeholder="5000">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Annual Interest Rate (%)</label>
+                            <input type="number" id="rd-rate" class="input-field w-full px-4 py-3 rounded-lg" placeholder="7.0" step="0.1">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Tenure (Months)</label>
+                            <input type="number" id="rd-tenure" class="input-field w-full px-4 py-3 rounded-lg" placeholder="24" min="3" max="120">
+                        </div>
+                        <div class="bg-slate-700/30 p-3 rounded-lg border border-slate-600">
+                            <p class="text-xs text-slate-400">Compounding: <span class="text-violet-400 font-semibold">Quarterly</span> — Indian banking standard</p>
+                        </div>
+                        <button onclick="calculateRD()"
+                            class="w-full bg-violet-600 text-white py-3 rounded-lg font-semibold hover:bg-violet-700 transition transform active:scale-95 shadow-lg shadow-violet-600/20">Calculate RD Maturity</button>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div id="rd-result" class="bg-gradient-to-br from-violet-600 to-purple-600 rounded-2xl shadow-xl p-5 sm:p-6 text-white hidden">
+                        <h4 class="text-lg font-semibold mb-4 opacity-90">Maturity Analysis</h4>
+                        <div class="text-3xl font-bold mb-1" id="rd-maturity">₹0</div>
+                        <p class="text-violet-100 text-sm mb-4">Maturity Value</p>
+                        <div class="space-y-3">
+                            <div class="flex justify-between border-b border-white/20 pb-2">
+                                <span class="opacity-75">Total Deposited</span>
+                                <span class="font-semibold" id="rd-deposited">₹0</span>
+                            </div>
+                            <div class="flex justify-between border-b border-white/20 pb-2">
+                                <span class="opacity-75">Total Interest</span>
+                                <span class="font-semibold" id="rd-interest">₹0</span>
+                            </div>
+                            <div class="flex justify-between border-b border-white/20 pb-2">
+                                <span class="opacity-75">Wealth Gain</span>
+                                <span class="font-semibold text-yellow-300" id="rd-gain">0%</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="opacity-75">Avg Monthly Interest</span>
+                                <span class="font-semibold" id="rd-monthly-growth">₹0</span>
+                            </div>
+                        </div>
+                        <div class="breakup-wrap">
+                            <table class="breakup-table">
+                                <thead><tr><th>Quarter</th><th>Deposited</th><th>Interest</th><th>Balance</th></tr></thead>
+                                <tbody id="rd-table-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="calculator-card rounded-2xl shadow-lg p-5 sm:p-6">
+                        <h4 class="font-semibold mb-3 text-slate-200">What is RD?</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed">A Recurring Deposit (RD) lets you make regular monthly deposits at a fixed interest rate. Indian banks compound RD interest quarterly. It's ideal for building a savings corpus through discipline.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ════════════════════════════════════════════════════════════ -->
+        <!-- 14 — EMI CALCULATOR                                         -->
+        <!-- ════════════════════════════════════════════════════════════ -->
+        <div id="emi-calc" class="calculator-section hidden smooth-fade">
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="calculator-card rounded-2xl shadow-xl p-5 sm:p-6">
+                    <h3 class="text-xl sm:text-2xl font-bold mb-6 flex items-center text-white">
+                        <span class="w-8 h-8 bg-rose-500/20 text-rose-400 rounded-lg flex items-center justify-center mr-3 text-sm">14</span>
+                        EMI Calculator
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Loan Type</label>
+                            <select id="emi-type" class="input-field w-full px-4 py-3 rounded-lg" onchange="setEmiDefaults()">
+                                <option value="home">Home Loan</option>
+                                <option value="car">Car Loan</option>
+                                <option value="personal">Personal Loan</option>
+                                <option value="custom">Custom</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Loan Amount (₹)</label>
+                            <input type="number" id="emi-principal" class="input-field w-full px-4 py-3 rounded-lg" placeholder="3000000">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Annual Interest Rate (%)</label>
+                            <input type="number" id="emi-rate" class="input-field w-full px-4 py-3 rounded-lg" placeholder="8.5" step="0.1">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Loan Tenure (Years)</label>
+                            <input type="number" id="emi-tenure" class="input-field w-full px-4 py-3 rounded-lg" placeholder="20" min="1" max="30">
+                        </div>
+                        <button onclick="calculateEMI()"
+                            class="w-full bg-rose-600 text-white py-3 rounded-lg font-semibold hover:bg-rose-700 transition transform active:scale-95 shadow-lg shadow-rose-600/20">Calculate EMI</button>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div id="emi-result" class="bg-gradient-to-br from-rose-600 to-red-600 rounded-2xl shadow-xl p-5 sm:p-6 text-white hidden">
+                        <h4 class="text-lg font-semibold mb-4 opacity-90">Loan Analysis</h4>
+                        <div class="text-3xl font-bold mb-1" id="emi-monthly">₹0</div>
+                        <p class="text-rose-100 text-sm mb-4">Monthly EMI</p>
+                        <div class="space-y-3">
+                            <div class="flex justify-between border-b border-white/20 pb-2">
+                                <span class="opacity-75">Principal</span>
+                                <span class="font-semibold" id="emi-principal-out">₹0</span>
+                            </div>
+                            <div class="flex justify-between border-b border-white/20 pb-2">
+                                <span class="opacity-75">Total Interest</span>
+                                <span class="font-semibold" id="emi-interest-out">₹0</span>
+                            </div>
+                            <div class="flex justify-between border-b border-white/20 pb-2">
+                                <span class="opacity-75">Total Payment</span>
+                                <span class="font-semibold" id="emi-total-out">₹0</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="opacity-75">Interest Portion</span>
+                                <span class="font-semibold text-yellow-300" id="emi-interest-pct">0%</span>
+                            </div>
+                        </div>
+                        <!-- Principal vs Interest bar -->
+                        <div class="emi-split-bar" id="emi-split-bar">
+                            <div class="emi-bar-p" id="emi-bar-p"></div>
+                            <div class="emi-bar-i" id="emi-bar-i"></div>
+                        </div>
+                        <div class="emi-legend">
+                            <span class="lp">Principal</span>
+                            <span class="li">Interest</span>
+                        </div>
+                        <div class="breakup-wrap">
+                            <table class="breakup-table">
+                                <thead><tr><th>Year</th><th>Principal Paid</th><th>Interest Paid</th><th>Outstanding</th></tr></thead>
+                                <tbody id="emi-table-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="calculator-card rounded-2xl shadow-lg p-5 sm:p-6">
+                        <h4 class="font-semibold mb-3 text-slate-200">What is EMI?</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed">An Equated Monthly Installment (EMI) is the fixed payment made every month towards repaying a loan. Early EMIs are interest-heavy; as the loan progresses, a larger fraction goes towards the principal (reducing balance method).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ════════════════════════════════════════════════════════════ -->
+        <!-- 15 — STEP-UP SIP CALCULATOR                                 -->
+        <!-- ════════════════════════════════════════════════════════════ -->
+        <div id="stepupsip-calc" class="calculator-section hidden smooth-fade">
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="calculator-card rounded-2xl shadow-xl p-5 sm:p-6">
+                    <h3 class="text-xl sm:text-2xl font-bold mb-6 flex items-center text-white">
+                        <span class="w-8 h-8 bg-lime-500/20 text-lime-400 rounded-lg flex items-center justify-center mr-3 text-sm">15</span>
+                        Step-up SIP Calculator
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Initial Monthly SIP (₹)</label>
+                            <input type="number" id="su-initial" class="input-field w-full px-4 py-3 rounded-lg" placeholder="5000">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Annual Step-up Rate (%)</label>
+                            <input type="number" id="su-stepup" class="input-field w-full px-4 py-3 rounded-lg" placeholder="10" step="1" min="0" max="50">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Expected Return Rate (% p.a.)</label>
+                            <input type="number" id="su-return" class="input-field w-full px-4 py-3 rounded-lg" placeholder="12" step="0.5">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Time Period (Years)</label>
+                            <input type="number" id="su-years" class="input-field w-full px-4 py-3 rounded-lg" placeholder="15" min="1" max="40">
+                        </div>
+                        <button onclick="calculateStepUpSIP()"
+                            class="w-full bg-lime-600 text-white py-3 rounded-lg font-semibold hover:bg-lime-700 transition transform active:scale-95 shadow-lg shadow-lime-600/20">Calculate Step-up SIP</button>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div id="su-result" class="bg-gradient-to-br from-lime-600 to-green-600 rounded-2xl shadow-xl p-5 sm:p-6 text-white hidden">
+                        <h4 class="text-lg font-semibold mb-4 opacity-90">Projected Returns</h4>
+                        <div class="text-3xl font-bold mb-1" id="su-corpus">₹0</div>
+                        <p class="text-lime-100 text-sm mb-4">Total Corpus</p>
+                        <div class="space-y-3">
+                            <div class="flex justify-between border-b border-white/20 pb-2">
+                                <span class="opacity-75">Total Invested</span>
+                                <span class="font-semibold" id="su-invested">₹0</span>
+                            </div>
+                            <div class="flex justify-between border-b border-white/20 pb-2">
+                                <span class="opacity-75">Est. Returns</span>
+                                <span class="font-semibold" id="su-returns">₹0</span>
+                            </div>
+                            <div class="flex justify-between border-b border-white/20 pb-2">
+                                <span class="opacity-75">Wealth Gain</span>
+                                <span class="font-semibold text-yellow-300" id="su-gain">0%</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="opacity-75">Final Monthly SIP</span>
+                                <span class="font-semibold" id="su-final-sip">₹0</span>
+                            </div>
+                        </div>
+                        <!-- vs Regular SIP comparison -->
+                        <div class="stepup-compare">
+                            <div>
+                                <div class="sc-label">Extra wealth vs Regular SIP</div>
+                                <div class="sc-val" id="su-extra">₹0 more</div>
+                            </div>
+                            <div style="text-align:right">
+                                <div class="sc-label">Regular SIP corpus</div>
+                                <div class="sc-val" id="su-regular-corpus">₹0</div>
+                            </div>
+                        </div>
+                        <div class="breakup-wrap">
+                            <table class="breakup-table">
+                                <thead><tr><th>Year</th><th>Monthly SIP</th><th>Invested</th><th>Corpus</th></tr></thead>
+                                <tbody id="su-table-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="calculator-card rounded-2xl shadow-lg p-5 sm:p-6">
+                        <h4 class="font-semibold mb-3 text-slate-200">What is Step-up SIP?</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed">A Step-up SIP (Top-up SIP) lets you increase your SIP amount by a fixed percentage every year. As your income grows, so does your investment — dramatically amplifying your final corpus compared to a flat SIP.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ════════════════════════════════════════════════════════════ -->
+        <!-- 16 — NSC CALCULATOR                                         -->
+        <!-- ════════════════════════════════════════════════════════════ -->
+        <div id="nsc-calc" class="calculator-section hidden smooth-fade">
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="calculator-card rounded-2xl shadow-xl p-5 sm:p-6">
+                    <h3 class="text-xl sm:text-2xl font-bold mb-6 flex items-center text-white">
+                        <span class="w-8 h-8 bg-sky-500/20 text-sky-400 rounded-lg flex items-center justify-center mr-3 text-sm">16</span>
+                        NSC Calculator
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Investment Amount (₹)</label>
+                            <input type="number" id="nsc-principal" class="input-field w-full px-4 py-3 rounded-lg" placeholder="100000">
+                        </div>
+                        <div class="bg-slate-700/30 p-3 rounded-lg border border-slate-600">
+                            <p class="text-xs text-slate-400">Current Interest Rate: <span class="text-sky-400 font-semibold">7.7% p.a.</span></p>
+                            <p class="text-xs text-slate-400">Tenure: <span class="text-sky-400 font-semibold">5 Years</span> &nbsp;|&nbsp; Compounding: <span class="text-sky-400 font-semibold">Annual</span></p>
+                            <p class="text-xs text-slate-400 mt-1">80C eligible (Years 1–4 reinvested)</p>
+                        </div>
+                        <button onclick="calculateNSC()"
+                            class="w-full bg-sky-600 text-white py-3 rounded-lg font-semibold hover:bg-sky-700 transition transform active:scale-95 shadow-lg shadow-sky-600/20">Calculate NSC Maturity</button>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div id="nsc-result" class="bg-gradient-to-br from-sky-600 to-blue-600 rounded-2xl shadow-xl p-5 sm:p-6 text-white hidden">
+                        <h4 class="text-lg font-semibold mb-4 opacity-90">Maturity Analysis</h4>
+                        <div class="text-3xl font-bold mb-1" id="nsc-maturity">₹0</div>
+                        <p class="text-sky-100 text-sm mb-4">Maturity Value (5 Years)</p>
+                        <div class="space-y-3">
+                            <div class="flex justify-between border-b border-white/20 pb-2">
+                                <span class="opacity-75">Principal</span>
+                                <span class="font-semibold" id="nsc-principal-out">₹0</span>
+                            </div>
+                            <div class="flex justify-between border-b border-white/20 pb-2">
+                                <span class="opacity-75">Total Interest</span>
+                                <span class="font-semibold" id="nsc-interest">₹0</span>
+                            </div>
+                            <div class="flex justify-between border-b border-white/20 pb-2">
+                                <span class="opacity-75">Absolute Return</span>
+                                <span class="font-semibold text-yellow-300" id="nsc-abs">0%</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="opacity-75">80C Benefit</span>
+                                <span class="font-semibold text-emerald-400">✓ Eligible</span>
+                            </div>
+                        </div>
+                        <div class="breakup-wrap">
+                            <table class="breakup-table">
+                                <thead><tr><th>Year</th><th>Interest</th><th>Cumul. Interest</th><th>Value</th></tr></thead>
+                                <tbody id="nsc-table-body"></tbody>
+                            </table>
+                        </div>
+                        <p class="text-xs text-sky-200/60 mt-2">* Year 5 interest is taxable in hands of investor.</p>
+                    </div>
+                    <div class="calculator-card rounded-2xl shadow-lg p-5 sm:p-6">
+                        <h4 class="font-semibold mb-3 text-slate-200">What is NSC?</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed">National Savings Certificate (NSC) is a post-office savings scheme with a 5-year lock-in. It offers guaranteed returns backed by the Government of India, and qualifies for Section 80C deduction. Interest compounds annually and is paid at maturity.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ════════════════════════════════════════════════════════════ -->
+        <!-- 17 — INCOME TAX CALCULATOR                                  -->
+        <!-- ════════════════════════════════════════════════════════════ -->
+        <div id="incometax-calc" class="calculator-section hidden smooth-fade">
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="calculator-card rounded-2xl shadow-xl p-5 sm:p-6">
+                    <h3 class="text-xl sm:text-2xl font-bold mb-6 flex items-center text-white">
+                        <span class="w-8 h-8 bg-yellow-500/20 text-yellow-400 rounded-lg flex items-center justify-center mr-3 text-sm">17</span>
+                        Income Tax Calculator
+                    </h3>
+                    <div class="space-y-4">
+                        <!-- Regime toggle -->
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Compare Regime</label>
+                            <div class="regime-toggle">
+                                <button class="regime-btn active" id="tax-btn-both" onclick="setTaxRegime('both')">Both (Compare)</button>
+                                <button class="regime-btn" id="tax-btn-new"  onclick="setTaxRegime('new')">New Only</button>
+                                <button class="regime-btn" id="tax-btn-old"  onclick="setTaxRegime('old')">Old Only</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Gross Annual Income (₹)</label>
+                            <input type="number" id="tax-income" class="input-field w-full px-4 py-3 rounded-lg" placeholder="1200000">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Age Group</label>
+                            <select id="tax-age" class="input-field w-full px-4 py-3 rounded-lg">
+                                <option value="below60">Below 60</option>
+                                <option value="60to80">Senior Citizen (60–80)</option>
+                                <option value="above80">Super Senior (80+)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Assessment Year</label>
+                            <select id="tax-ay" class="input-field w-full px-4 py-3 rounded-lg">
+                                <option value="2025">AY 2025–26</option>
+                                <option value="2026">AY 2026–27</option>
+                            </select>
+                        </div>
+                        <!-- Old regime deductions -->
+                        <div id="tax-old-deductions">
+                            <div class="text-sm font-semibold text-yellow-400 mb-3 pt-1">Old Regime Deductions</div>
+                            <div class="space-y-3">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-1">80C — PPF / ELSS / FD (₹)</label>
+                                    <input type="number" id="tax-80c" class="input-field w-full px-4 py-3 rounded-lg" placeholder="Max ₹1,50,000" max="150000" min="0">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-1">80D — Health Insurance (₹)</label>
+                                    <input type="number" id="tax-80d" class="input-field w-full px-4 py-3 rounded-lg" placeholder="Max ₹25,000 / ₹50,000 senior" min="0">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-1">HRA Exemption (₹)</label>
+                                    <input type="number" id="tax-hra" class="input-field w-full px-4 py-3 rounded-lg" placeholder="e.g. 60000" min="0">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-1">Other Deductions — LTA / NPS (₹)</label>
+                                    <input type="number" id="tax-other" class="input-field w-full px-4 py-3 rounded-lg" placeholder="e.g. 50000" min="0">
+                                </div>
+                            </div>
+                        </div>
+                        <button onclick="calculateIncomeTax()"
+                            class="w-full bg-yellow-500 text-slate-900 py-3 rounded-lg font-semibold hover:bg-yellow-400 transition transform active:scale-95 shadow-lg shadow-yellow-500/20">Calculate Tax</button>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div id="tax-result" class="bg-gradient-to-br from-yellow-600 to-amber-600 rounded-2xl shadow-xl p-5 sm:p-6 text-white hidden">
+                        <h4 class="text-lg font-semibold mb-1 opacity-90">Tax Analysis</h4>
+                        <!-- Regime comparison cards -->
+                        <div class="tax-compare" id="tax-compare-cards"></div>
+                        <div class="space-y-3 mt-4">
+                            <div class="flex justify-between border-b border-white/20 pb-2">
+                                <span class="opacity-75">Gross Income</span>
+                                <span class="font-semibold" id="tax-gross-out">₹0</span>
+                            </div>
+                            <div class="flex justify-between border-b border-white/20 pb-2">
+                                <span class="opacity-75">Effective Tax Rate</span>
+                                <span class="font-semibold text-yellow-200" id="tax-eff-rate">0%</span>
+                            </div>
+                            <div class="flex justify-between border-b border-white/20 pb-2">
+                                <span class="opacity-75">In-Hand Monthly</span>
+                                <span class="font-semibold" id="tax-inhand">₹0</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="opacity-75">Surcharge + Cess</span>
+                                <span class="font-semibold" id="tax-cess">₹0</span>
+                            </div>
+                        </div>
+                        <!-- Slab breakdown -->
+                        <div class="mt-4">
+                            <div class="text-sm font-semibold text-yellow-200 mb-2" id="tax-slab-heading">Slab Breakdown</div>
+                            <table class="tax-slab-table">
+                                <thead><tr><th>Income Slab</th><th>Rate</th><th>Tax</th></tr></thead>
+                                <tbody id="tax-slab-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="calculator-card rounded-2xl shadow-lg p-5 sm:p-6">
+                        <h4 class="font-semibold mb-3 text-slate-200">Old vs New Regime</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed">The New Tax Regime (default from FY 2023–24) offers lower slab rates but no deductions. The Old Regime allows 80C, 80D, HRA etc. Use this calculator to find which saves you more tax.</p>
                     </div>
                 </div>
             </div>
@@ -947,45 +1400,36 @@
             <div class="grid md:grid-cols-2 gap-6">
                 <div class="calculator-card rounded-2xl shadow-xl p-5 sm:p-6">
                     <h3 class="text-xl sm:text-2xl font-bold mb-6 flex items-center text-white">
-                        <span
-                            class="w-8 h-8 bg-red-500/20 text-red-400 rounded-lg flex items-center justify-center mr-3 text-sm">8</span>
+                        <span class="w-8 h-8 bg-red-500/20 text-red-400 rounded-lg flex items-center justify-center mr-3 text-sm">8</span>
                         Position Sizing
                     </h3>
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-slate-300 mb-1">Account Size (₹)</label>
-                            <input type="number" id="pos-account" class="input-field w-full px-4 py-3 rounded-lg"
-                                placeholder="100000" value="100000">
+                            <input type="number" id="pos-account" class="input-field w-full px-4 py-3 rounded-lg" placeholder="100000" value="100000">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-slate-300 mb-1">Risk per Trade (%)</label>
-                            <input type="number" id="pos-risk" class="input-field w-full px-4 py-3 rounded-lg"
-                                placeholder="2" value="2">
+                            <input type="number" id="pos-risk" class="input-field w-full px-4 py-3 rounded-lg" placeholder="2" value="2">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-slate-300 mb-1">Entry Price (₹)</label>
-                            <input type="number" id="pos-entry" class="input-field w-full px-4 py-3 rounded-lg"
-                                placeholder="1000" value="1000">
+                            <input type="number" id="pos-entry" class="input-field w-full px-4 py-3 rounded-lg" placeholder="1000" value="1000">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-slate-300 mb-1">Stop Loss (₹)</label>
-                            <input type="number" id="pos-stop" class="input-field w-full px-4 py-3 rounded-lg"
-                                placeholder="950" value="950">
+                            <input type="number" id="pos-stop" class="input-field w-full px-4 py-3 rounded-lg" placeholder="950" value="950">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-slate-300 mb-1">Target Price (₹)
-                                (Optional)</label>
-                            <input type="number" id="pos-target" class="input-field w-full px-4 py-3 rounded-lg"
-                                placeholder="1200" value="1200">
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Target Price (₹) (Optional)</label>
+                            <input type="number" id="pos-target" class="input-field w-full px-4 py-3 rounded-lg" placeholder="1200" value="1200">
                         </div>
                         <button onclick="calculatePosition()"
-                            class="w-full bg-red-600 text-white py-3 rounded-lg font-semibold hover:bg-red-700 transition transform active:scale-95 shadow-lg shadow-red-600/20">Calculate
-                            Position Size</button>
+                            class="w-full bg-red-600 text-white py-3 rounded-lg font-semibold hover:bg-red-700 transition transform active:scale-95 shadow-lg shadow-red-600/20">Calculate Position Size</button>
                     </div>
                 </div>
                 <div class="space-y-4">
-                    <div id="pos-result"
-                        class="bg-gradient-to-br from-red-600 to-orange-600 rounded-2xl shadow-xl p-5 sm:p-6 text-white hidden">
+                    <div id="pos-result" class="bg-gradient-to-br from-red-600 to-orange-600 rounded-2xl shadow-xl p-5 sm:p-6 text-white hidden">
                         <h4 class="text-lg font-semibold mb-4 opacity-90">Risk Management</h4>
                         <div class="grid grid-cols-2 gap-4 mb-4">
                             <div class="bg-white/10 rounded-lg p-3">
@@ -1018,22 +1462,16 @@
                     </div>
                     <div class="calculator-card rounded-2xl shadow-lg p-5 sm:p-6">
                         <h4 class="font-semibold mb-3 text-slate-200">What is Position Sizing?</h4>
-                        <p class="text-slate-400 text-sm leading-relaxed">Position sizing is the process of determining
-                            how many units of a security to buy, based on your risk tolerance and account size. It is
-                            the
-                            most important part of risk management.</p>
+                        <p class="text-slate-400 text-sm leading-relaxed">Position sizing is the process of determining how many units of a security to buy, based on your risk tolerance and account size. It is the most important part of risk management.</p>
                     </div>
                     <div class="bg-yellow-500/10 border border-yellow-500/20 rounded-2xl p-5 sm:p-6">
                         <h4 class="font-semibold mb-2 text-yellow-400 flex items-center">
                             <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd"
-                                    d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-                                    clip-rule="evenodd" />
+                                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
                             </svg>
                             Risk Warning
                         </h4>
-                        <p class="text-sm text-yellow-200/80">Never risk more than 1-2% of your capital on a single
-                            trade. Position sizing is crucial for long-term survival in markets.</p>
+                        <p class="text-sm text-yellow-200/80">Never risk more than 1-2% of your capital on a single trade. Position sizing is crucial for long-term survival in markets.</p>
                     </div>
                 </div>
             </div>
@@ -1043,64 +1481,46 @@
 
     <!-- About Modal -->
     <div id="aboutModal" class="fixed inset-0 z-[60] hidden">
-        <div class="modal-backdrop absolute inset-0 transition-opacity opacity-0" id="modalBackdrop"
-            onclick="closeAboutModal()"></div>
+        <div class="modal-backdrop absolute inset-0 transition-opacity opacity-0" id="modalBackdrop" onclick="closeAboutModal()"></div>
         <div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
-            <div class="bg-slate-800/95 backdrop-blur-xl border border-slate-700 rounded-3xl shadow-2xl max-w-md w-full p-6 sm:p-8 transform scale-95 opacity-0 transition-all duration-300 pointer-events-auto"
-                id="modalContent">
+            <div class="bg-slate-800/95 backdrop-blur-xl border border-slate-700 rounded-3xl shadow-2xl max-w-md w-full p-6 sm:p-8 transform scale-95 opacity-0 transition-all duration-300 pointer-events-auto" id="modalContent">
                 <div class="flex justify-between items-start mb-6">
                     <div class="flex items-center space-x-3">
-                        <div
-                            class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center text-white font-bold text-2xl shadow-lg">
-                            ₹
-                        </div>
+                        <div class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center text-white font-bold text-2xl shadow-lg">₹</div>
                         <div>
                             <h3 class="text-2xl font-bold text-white">About</h3>
-                            <p class="text-slate-400 text-sm">Financial Calculators v1.1</p>
+                            <p class="text-slate-400 text-sm">Financial Calculators v1.2</p>
                         </div>
                     </div>
                     <button onclick="closeAboutModal()" class="text-slate-400 hover:text-white transition p-1">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M6 18L18 6M6 6l12 12"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
                     </button>
                 </div>
-
                 <div class="space-y-4 text-slate-300 text-sm leading-relaxed">
-                    <p>Welcome to <span class="text-indigo-400 font-semibold">Financial Calculators</span>, your
-                        comprehensive suite of professional-grade investment tools.</p>
-
+                    <p>Welcome to <span class="text-indigo-400 font-semibold">Financial Calculators</span>, your comprehensive suite of professional-grade investment tools.</p>
                     <div class="bg-slate-700/50 rounded-xl p-4 space-y-3">
                         <div class="flex items-start space-x-3">
                             <span class="text-emerald-400 mt-0.5">✓</span>
-                            <span><strong class="text-white">11 Powerful Calculators</strong> — From SIP to Retirement
-                                planning</span>
+                            <span><strong class="text-white">17 Powerful Calculators</strong> — SIP, FD, RD, EMI, Tax &amp; more</span>
                         </div>
                         <div class="flex items-start space-x-3">
                             <span class="text-emerald-400 mt-0.5">✓</span>
-                            <span><strong class="text-white">Works Offline</strong> — Install as PWA and use without
-                                internet</span>
+                            <span><strong class="text-white">Works Offline</strong> — Install as PWA and use without internet</span>
                         </div>
                         <div class="flex items-start space-x-3">
                             <span class="text-emerald-400 mt-0.5">✓</span>
-                            <span><strong class="text-white">Mobile Optimized</strong> — Native app experience on
-                                Android & iOS</span>
+                            <span><strong class="text-white">Mobile Optimized</strong> — Native app experience on Android &amp; iOS</span>
                         </div>
                         <div class="flex items-start space-x-3">
                             <span class="text-emerald-400 mt-0.5">✓</span>
                             <span><strong class="text-white">Privacy First</strong> — No data leaves your device</span>
                         </div>
                     </div>
-
-                    <p class="text-xs text-slate-500 pt-2">Designed for investors, by investors. Make informed financial
-                        decisions with precision.</p>
+                    <p class="text-xs text-slate-500 pt-2">Designed for investors, by investors. Make informed financial decisions with precision.</p>
                 </div>
-
-                <button onclick="closeAboutModal()"
-                    class="w-full mt-6 bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl font-semibold transition transform active:scale-95">
-                    Got it
-                </button>
+                <button onclick="closeAboutModal()" class="w-full mt-6 bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl font-semibold transition transform active:scale-95">Got it</button>
             </div>
         </div>
     </div>
@@ -1108,27 +1528,17 @@
     <!-- Install Prompt (Bottom Sheet for Mobile) -->
     <div id="installPrompt" class="fixed inset-0 z-[70] hidden sm:hidden">
         <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="hideInstallPrompt()"></div>
-        <div
-            class="absolute bottom-0 left-0 right-0 bg-slate-800 rounded-t-3xl p-6 install-prompt border-t border-slate-700">
+        <div class="absolute bottom-0 left-0 right-0 bg-slate-800 rounded-t-3xl p-6 install-prompt border-t border-slate-700">
             <div class="flex items-center space-x-4 mb-4">
-                <div
-                    class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center text-white font-bold text-3xl shadow-lg">
-                    ₹
-                </div>
+                <div class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center text-white font-bold text-3xl shadow-lg">₹</div>
                 <div>
                     <h3 class="text-xl font-bold text-white">Install Financial Calculators</h3>
                     <p class="text-slate-400 text-sm">Add to Home Screen for quick access</p>
                 </div>
             </div>
             <div class="space-y-3">
-                <button onclick="installApp()"
-                    class="w-full bg-indigo-600 text-white py-4 rounded-xl font-semibold hover:bg-indigo-700 transition shadow-lg shadow-indigo-600/20">
-                    Install App
-                </button>
-                <button onclick="hideInstallPrompt()"
-                    class="w-full bg-slate-700 text-slate-300 py-4 rounded-xl font-semibold hover:bg-slate-600 transition">
-                    Not Now
-                </button>
+                <button onclick="installApp()" class="w-full bg-indigo-600 text-white py-4 rounded-xl font-semibold hover:bg-indigo-700 transition shadow-lg shadow-indigo-600/20">Install App</button>
+                <button onclick="hideInstallPrompt()" class="w-full bg-slate-700 text-slate-300 py-4 rounded-xl font-semibold hover:bg-slate-600 transition">Not Now</button>
             </div>
         </div>
     </div>
@@ -1140,17 +1550,13 @@
                 <div class="flex">
                     <div class="flex-shrink-0">
                         <svg class="h-5 w-5 text-yellow-500" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd"
-                                d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-                                clip-rule="evenodd" />
+                            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
                         </svg>
                     </div>
                     <div class="ml-3">
                         <h3 class="text-sm font-medium text-yellow-400">Disclaimer</h3>
                         <div class="mt-2 text-sm text-yellow-200/70">
-                            <p>These calculators are for educational purposes only and do not constitute financial
-                                advice. Past performance does not guarantee future results. Please consult a certified
-                                financial planner before making investment decisions.</p>
+                            <p>These calculators are for educational purposes only and do not constitute financial advice. Past performance does not guarantee future results. Please consult a certified financial planner before making investment decisions.</p>
                         </div>
                     </div>
                 </div>
@@ -1159,22 +1565,19 @@
     </section>
 
     <script>
-        // PWA Service Worker Registration
+        // ─── PWA ──────────────────────────────────────────────────────────────────
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js').then(registration => {
-                    console.log('SW registered:', registration);
-                }).catch(error => {
-                    console.log('SW registration failed:', error);
-                });
+                navigator.serviceWorker.register('sw.js')
+                    .then(r => console.log('SW registered:', r))
+                    .catch(e => console.log('SW failed:', e));
             });
         }
 
-        // Install Prompt Logic
         let deferredPrompt;
         const installBtn = document.getElementById('installBtn');
         const mobileInstallBanner = document.getElementById('mobileInstallBanner');
-        const installPrompt = document.getElementById('installPrompt');
+        const installPromptEl = document.getElementById('installPrompt');
 
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
@@ -1186,505 +1589,690 @@
         function showInstallPrompt() {
             if (deferredPrompt) {
                 deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        console.log('User accepted install');
-                        hideInstallPrompt();
-                    }
+                deferredPrompt.userChoice.then(r => {
+                    if (r.outcome === 'accepted') hideInstallPrompt();
                     deferredPrompt = null;
                 });
             } else {
-                // Show custom install prompt for iOS or unsupported browsers
-                installPrompt.classList.remove('hidden');
+                installPromptEl.classList.remove('hidden');
             }
         }
+        function hideInstallPrompt() { installPromptEl.classList.add('hidden'); }
+        function installApp() { hideInstallPrompt(); if (deferredPrompt) deferredPrompt.prompt(); }
 
-        function hideInstallPrompt() {
-            installPrompt.classList.add('hidden');
-        }
-
-        function installApp() {
-            hideInstallPrompt();
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-            }
-        }
-
-        // About Modal Logic
+        // ─── Modal ────────────────────────────────────────────────────────────────
         function openAboutModal() {
             const modal = document.getElementById('aboutModal');
             const backdrop = document.getElementById('modalBackdrop');
             const content = document.getElementById('modalContent');
-
             modal.classList.remove('hidden');
-            // Trigger reflow
             void modal.offsetWidth;
-
             backdrop.classList.remove('opacity-0');
-            content.classList.remove('scale-95', 'opacity-0');
-            content.classList.add('scale-100', 'opacity-100');
+            content.classList.remove('scale-95','opacity-0');
+            content.classList.add('scale-100','opacity-100');
         }
-
         function closeAboutModal() {
             const modal = document.getElementById('aboutModal');
             const backdrop = document.getElementById('modalBackdrop');
             const content = document.getElementById('modalContent');
-
             backdrop.classList.add('opacity-0');
-            content.classList.remove('scale-100', 'opacity-100');
-            content.classList.add('scale-95', 'opacity-0');
-
-            setTimeout(() => {
-                modal.classList.add('hidden');
-            }, 300);
+            content.classList.remove('scale-100','opacity-100');
+            content.classList.add('scale-95','opacity-0');
+            setTimeout(() => modal.classList.add('hidden'), 300);
         }
 
-        // Global chart instances
-        let sipChartInstance = null;
-        let lumpChartInstance = null;
-        let retireChartInstance = null;
+        // ─── Charts ───────────────────────────────────────────────────────────────
+        let sipChartInstance = null, lumpChartInstance = null, retireChartInstance = null;
 
-        // Utility functions
-        function formatCurrency(amount) {
-            if (amount >= 10000000) return '₹' + (amount / 10000000).toFixed(2) + ' Cr';
-            if (amount >= 100000) return '₹' + (amount / 100000).toFixed(2) + ' Lakh';
-            return '₹' + Math.round(amount).toLocaleString('en-IN');
+        // ─── Utilities ────────────────────────────────────────────────────────────
+        function formatCurrency(n) {
+            if (n >= 10000000) return '₹' + (n / 10000000).toFixed(2) + ' Cr';
+            if (n >= 100000)   return '₹' + (n / 100000).toFixed(2)   + ' Lakh';
+            return '₹' + Math.round(n).toLocaleString('en-IN');
         }
+        function fmtPct(n) { return (Math.round(n * 100) / 100).toFixed(2) + '%'; }
+        function updateSlider(inputId, sliderId) { document.getElementById(sliderId).value = document.getElementById(inputId).value; }
+        function updateInput(inputId, sliderId)  { document.getElementById(inputId).value  = document.getElementById(sliderId).value; }
 
-        function updateSlider(inputId, sliderId) {
-            document.getElementById(sliderId).value = document.getElementById(inputId).value;
-        }
-
-        function updateInput(inputId, sliderId) {
-            document.getElementById(inputId).value = document.getElementById(sliderId).value;
-        }
-
-        // Tab switching
+        // ─── Tab switching ────────────────────────────────────────────────────────
         function showCalculator(calcId) {
-            document.querySelectorAll('.calculator-section').forEach(section => {
-                section.classList.add('hidden');
-            });
-
+            document.querySelectorAll('.calculator-section').forEach(s => s.classList.add('hidden'));
             document.getElementById(calcId + '-calc').classList.remove('hidden');
-
-            document.querySelectorAll('.calc-tab').forEach(tab => {
-                tab.classList.remove('tab-active', 'text-indigo-400');
-                tab.classList.add('text-slate-400');
+            document.querySelectorAll('.calc-tab').forEach(t => {
+                t.classList.remove('tab-active','text-indigo-400','text-cyan-400','text-violet-400',
+                    'text-rose-400','text-lime-400','text-sky-400','text-yellow-400');
+                t.classList.add('text-slate-400');
             });
-
             const activeTab = document.querySelector(`[data-calc="${calcId}"]`);
             if (activeTab) {
-                activeTab.classList.add('tab-active', 'text-indigo-400');
+                activeTab.classList.add('tab-active');
                 activeTab.classList.remove('text-slate-400');
             }
-
-            // Scroll to top smoothly
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // CAGR Calculator
+        // ─── CAGR ─────────────────────────────────────────────────────────────────
         function calculateCAGR() {
             const initial = parseFloat(document.getElementById('cagr-initial').value);
-            const final = parseFloat(document.getElementById('cagr-final').value);
-            const years = parseFloat(document.getElementById('cagr-years').value);
-
+            const final   = parseFloat(document.getElementById('cagr-final').value);
+            const years   = parseFloat(document.getElementById('cagr-years').value);
             if (initial && final && years) {
                 const cagr = (Math.pow(final / initial, 1 / years) - 1) * 100;
-                const totalReturn = final - initial;
-                const absoluteReturn = ((final - initial) / initial) * 100;
-
-                document.getElementById('cagr-value').textContent = cagr.toFixed(2) + '%';
-                document.getElementById('cagr-return').textContent = formatCurrency(totalReturn);
-                document.getElementById('cagr-absolute').textContent = absoluteReturn.toFixed(2) + '%';
+                document.getElementById('cagr-value').textContent    = cagr.toFixed(2) + '%';
+                document.getElementById('cagr-return').textContent   = formatCurrency(final - initial);
+                document.getElementById('cagr-absolute').textContent = ((final - initial) / initial * 100).toFixed(2) + '%';
                 document.getElementById('cagr-result').classList.remove('hidden');
             }
         }
 
-        // SIP Calculator
+        // ─── SIP ──────────────────────────────────────────────────────────────────
         function calculateSIP() {
             const monthlyInvestment = parseFloat(document.getElementById('sip-amount').value);
-            const rateOfReturn = parseFloat(document.getElementById('sip-rate').value);
-            const years = parseFloat(document.getElementById('sip-years').value);
-
+            const rateOfReturn      = parseFloat(document.getElementById('sip-rate').value);
+            const years             = parseFloat(document.getElementById('sip-years').value);
             if (monthlyInvestment && rateOfReturn && years) {
                 const months = years * 12;
-                const monthlyRate = rateOfReturn / 12 / 100;
-
-                const futureValue = monthlyInvestment * ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate) * (1 + monthlyRate);
-                const totalInvested = monthlyInvestment * months;
-                const estimatedReturns = futureValue - totalInvested;
-                const gainPercent = (estimatedReturns / totalInvested) * 100;
-
-                document.getElementById('sip-total').textContent = formatCurrency(futureValue);
-                document.getElementById('sip-invested').textContent = formatCurrency(totalInvested);
-                document.getElementById('sip-returns').textContent = formatCurrency(estimatedReturns);
-                document.getElementById('sip-gain').textContent = gainPercent.toFixed(1) + '%';
+                const mr = rateOfReturn / 12 / 100;
+                const fv = monthlyInvestment * ((Math.pow(1 + mr, months) - 1) / mr) * (1 + mr);
+                const ti = monthlyInvestment * months;
+                const er = fv - ti;
+                document.getElementById('sip-total').textContent    = formatCurrency(fv);
+                document.getElementById('sip-invested').textContent = formatCurrency(ti);
+                document.getElementById('sip-returns').textContent  = formatCurrency(er);
+                document.getElementById('sip-gain').textContent     = (er / ti * 100).toFixed(1) + '%';
                 document.getElementById('sip-result').classList.remove('hidden');
                 document.getElementById('sip-chart-card').classList.remove('hidden');
-
                 const ctx = document.getElementById('sipChart').getContext('2d');
                 if (sipChartInstance) sipChartInstance.destroy();
-
                 sipChartInstance = new Chart(ctx, {
                     type: 'doughnut',
-                    data: {
-                        labels: ['Invested Amount', 'Est. Returns'],
-                        datasets: [{
-                            data: [totalInvested, estimatedReturns],
-                            backgroundColor: ['#10B981', '#34D399'],
-                            borderWidth: 0
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: true,
-                        plugins: {
-                            legend: {
-                                position: 'bottom',
-                                labels: { color: '#94a3b8' }
-                            }
-                        }
-                    }
+                    data: { labels: ['Invested Amount','Est. Returns'], datasets: [{ data: [ti, er], backgroundColor: ['#10B981','#34D399'], borderWidth: 0 }] },
+                    options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8' } } } }
                 });
             }
         }
 
-        // Lumpsum Calculator
+        // ─── Lumpsum ──────────────────────────────────────────────────────────────
         function calculateLumpsum() {
             const amount = parseFloat(document.getElementById('lump-amount').value);
-            const rate = parseFloat(document.getElementById('lump-rate').value);
-            const years = parseFloat(document.getElementById('lump-years').value);
-
+            const rate   = parseFloat(document.getElementById('lump-rate').value);
+            const years  = parseFloat(document.getElementById('lump-years').value);
             if (amount && rate && years) {
-                const futureValue = amount * Math.pow((1 + rate / 100), years);
-                const returns = futureValue - amount;
-                const multiplier = futureValue / amount;
-
-                document.getElementById('lump-total').textContent = formatCurrency(futureValue);
-                document.getElementById('lump-invested').textContent = formatCurrency(amount);
-                document.getElementById('lump-returns').textContent = formatCurrency(returns);
-                document.getElementById('lump-multiplier').textContent = multiplier.toFixed(1) + 'x';
+                const fv = amount * Math.pow(1 + rate / 100, years);
+                const r  = fv - amount;
+                document.getElementById('lump-total').textContent      = formatCurrency(fv);
+                document.getElementById('lump-invested').textContent   = formatCurrency(amount);
+                document.getElementById('lump-returns').textContent    = formatCurrency(r);
+                document.getElementById('lump-multiplier').textContent = (fv / amount).toFixed(1) + 'x';
                 document.getElementById('lump-result').classList.remove('hidden');
                 document.getElementById('lump-chart-card').classList.remove('hidden');
-
                 const ctx = document.getElementById('lumpChart').getContext('2d');
                 if (lumpChartInstance) lumpChartInstance.destroy();
-
                 lumpChartInstance = new Chart(ctx, {
                     type: 'doughnut',
-                    data: {
-                        labels: ['Principal', 'Returns'],
-                        datasets: [{
-                            data: [amount, returns],
-                            backgroundColor: ['#8B5CF6', '#EC4899'],
-                            borderWidth: 0
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: true,
-                        plugins: {
-                            legend: {
-                                position: 'bottom',
-                                labels: { color: '#94a3b8' }
-                            }
-                        }
-                    }
+                    data: { labels: ['Principal','Returns'], datasets: [{ data: [amount, r], backgroundColor: ['#8B5CF6','#EC4899'], borderWidth: 0 }] },
+                    options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8' } } } }
                 });
             }
         }
 
-        // Goal SIP Calculator
+        // ─── Goal SIP ─────────────────────────────────────────────────────────────
         function calculateGoalSIP() {
             const target = parseFloat(document.getElementById('goal-sip-target').value);
-            const rate = parseFloat(document.getElementById('goal-sip-rate').value);
-            const years = parseFloat(document.getElementById('goal-sip-years').value);
-
+            const rate   = parseFloat(document.getElementById('goal-sip-rate').value);
+            const years  = parseFloat(document.getElementById('goal-sip-years').value);
             if (target && rate && years) {
-                const months = years * 12;
-                const monthlyRate = rate / 12 / 100;
-
-                const sipAmount = target / (((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate) * (1 + monthlyRate));
-                const totalInvested = sipAmount * months;
-                const returns = target - totalInvested;
-
-                document.getElementById('goal-sip-amount').textContent = formatCurrency(sipAmount);
-                document.getElementById('goal-sip-total-invested').textContent = formatCurrency(totalInvested);
+                const months = years * 12, mr = rate / 12 / 100;
+                const sip = target / (((Math.pow(1 + mr, months) - 1) / mr) * (1 + mr));
+                const ti  = sip * months;
+                document.getElementById('goal-sip-amount').textContent         = formatCurrency(sip);
+                document.getElementById('goal-sip-total-invested').textContent = formatCurrency(ti);
                 document.getElementById('goal-sip-target-display').textContent = formatCurrency(target);
-                document.getElementById('goal-sip-returns').textContent = formatCurrency(returns);
+                document.getElementById('goal-sip-returns').textContent        = formatCurrency(target - ti);
                 document.getElementById('goal-sip-result').classList.remove('hidden');
             }
         }
 
-        // Goal Lumpsum Calculator
+        // ─── Goal Lumpsum ─────────────────────────────────────────────────────────
         function calculateGoalLumpsum() {
             const target = parseFloat(document.getElementById('goal-lump-target').value);
-            const rate = parseFloat(document.getElementById('goal-lump-rate').value);
-            const years = parseFloat(document.getElementById('goal-lump-years').value);
-
+            const rate   = parseFloat(document.getElementById('goal-lump-rate').value);
+            const years  = parseFloat(document.getElementById('goal-lump-years').value);
             if (target && rate && years) {
-                const presentValue = target / Math.pow((1 + rate / 100), years);
-                const growth = target - presentValue;
-                const multiple = target / presentValue;
-
-                document.getElementById('goal-lump-amount').textContent = formatCurrency(presentValue);
+                const pv = target / Math.pow(1 + rate / 100, years);
+                document.getElementById('goal-lump-amount').textContent         = formatCurrency(pv);
                 document.getElementById('goal-lump-target-display').textContent = formatCurrency(target);
-                document.getElementById('goal-lump-growth').textContent = formatCurrency(growth);
-                document.getElementById('goal-lump-multiple').textContent = multiple.toFixed(1) + 'x';
+                document.getElementById('goal-lump-growth').textContent         = formatCurrency(target - pv);
+                document.getElementById('goal-lump-multiple').textContent       = (target / pv).toFixed(1) + 'x';
                 document.getElementById('goal-lump-result').classList.remove('hidden');
             }
         }
 
-        // Retirement Calculator
+        // ─── Retirement ───────────────────────────────────────────────────────────
         function calculateRetirement() {
             const currentAge = parseFloat(document.getElementById('retire-current-age').value);
-            const retireAge = parseFloat(document.getElementById('retire-age').value);
-            const monthlyExpenses = parseFloat(document.getElementById('retire-expenses').value);
-            const inflation = parseFloat(document.getElementById('retire-inflation').value);
+            const retireAge  = parseFloat(document.getElementById('retire-age').value);
+            const expenses   = parseFloat(document.getElementById('retire-expenses').value);
+            const inflation  = parseFloat(document.getElementById('retire-inflation').value);
             const postReturn = parseFloat(document.getElementById('retire-return').value);
-            const lifeExpectancy = parseFloat(document.getElementById('retire-life').value);
-
-            if (currentAge && retireAge && monthlyExpenses) {
+            const life       = parseFloat(document.getElementById('retire-life').value);
+            if (currentAge && retireAge && expenses) {
                 const yearsToRetire = retireAge - currentAge;
-                const retirementYears = lifeExpectancy - retireAge;
-
-                const futureMonthlyExpense = monthlyExpenses * Math.pow((1 + inflation / 100), yearsToRetire);
-
-                const realRate = (postReturn - inflation) / 100;
-                let corpusNeeded;
-                if (realRate === 0) {
-                    corpusNeeded = futureMonthlyExpense * 12 * retirementYears;
-                } else {
-                    corpusNeeded = (futureMonthlyExpense * 12) * (1 - Math.pow((1 + realRate), -retirementYears)) / realRate;
-                }
-
-                const preReturn = 12;
-                const months = yearsToRetire * 12;
-                const monthlyRate = preReturn / 12 / 100;
-                const sipRequired = corpusNeeded / (((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate) * (1 + monthlyRate));
-
-                document.getElementById('retire-corpus').textContent = formatCurrency(corpusNeeded);
-                document.getElementById('retire-sip').textContent = formatCurrency(sipRequired);
-                document.getElementById('retire-future-expense').textContent = formatCurrency(futureMonthlyExpense);
-                document.getElementById('retire-years-left').textContent = yearsToRetire;
+                const retireYears   = life - retireAge;
+                const futureExp     = expenses * Math.pow(1 + inflation / 100, yearsToRetire);
+                const realRate      = (postReturn - inflation) / 100;
+                const corpus = realRate === 0
+                    ? futureExp * 12 * retireYears
+                    : (futureExp * 12) * (1 - Math.pow(1 + realRate, -retireYears)) / realRate;
+                const mr  = 12 / 12 / 100, months = yearsToRetire * 12;
+                const sip = corpus / (((Math.pow(1 + mr, months) - 1) / mr) * (1 + mr));
+                document.getElementById('retire-corpus').textContent         = formatCurrency(corpus);
+                document.getElementById('retire-sip').textContent            = formatCurrency(sip);
+                document.getElementById('retire-future-expense').textContent = formatCurrency(futureExp);
+                document.getElementById('retire-years-left').textContent     = yearsToRetire;
                 document.getElementById('retire-result').classList.remove('hidden');
                 document.getElementById('retire-chart-card').classList.remove('hidden');
-
                 const ctx = document.getElementById('retireChart').getContext('2d');
                 if (retireChartInstance) retireChartInstance.destroy();
-
-                const labels = [];
-                const corpusData = [];
-                const investedData = [];
-
+                const labels = [], corpusData = [], investedData = [];
                 for (let i = 0; i <= yearsToRetire; i += 5) {
+                    const mp = i * 12;
                     labels.push('Age ' + (currentAge + i));
-                    const monthsPassed = i * 12;
-                    const totalInvested = sipRequired * monthsPassed;
-                    const currentCorpus = sipRequired * ((Math.pow(1 + monthlyRate, monthsPassed) - 1) / monthlyRate) * (1 + monthlyRate);
-                    corpusData.push(currentCorpus);
-                    investedData.push(totalInvested);
+                    corpusData.push(sip * ((Math.pow(1 + mr, mp) - 1) / mr) * (1 + mr));
+                    investedData.push(sip * mp);
                 }
-
                 retireChartInstance = new Chart(ctx, {
                     type: 'line',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'Projected Corpus',
-                            data: corpusData,
-                            borderColor: '#14B8A6',
-                            backgroundColor: 'rgba(20, 184, 166, 0.1)',
-                            fill: true
-                        }, {
-                            label: 'Amount Invested',
-                            data: investedData,
-                            borderColor: '#64748b',
-                            borderDash: [5, 5]
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: true,
-                        plugins: {
-                            legend: {
-                                position: 'bottom',
-                                labels: { color: '#94a3b8' }
-                            }
-                        },
-                        scales: {
-                            y: {
-                                ticks: {
-                                    color: '#64748b',
-                                    callback: function (value) {
-                                        return '₹' + (value / 100000).toFixed(0) + 'L';
-                                    }
-                                },
-                                grid: { color: '#334155' }
-                            },
-                            x: {
-                                ticks: { color: '#64748b' },
-                                grid: { color: '#334155' }
-                            }
-                        }
-                    }
+                    data: { labels, datasets: [
+                        { label: 'Projected Corpus', data: corpusData, borderColor: '#14B8A6', backgroundColor: 'rgba(20,184,166,0.1)', fill: true },
+                        { label: 'Amount Invested',  data: investedData, borderColor: '#64748b', borderDash: [5, 5] }
+                    ]},
+                    options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8' } } },
+                        scales: { y: { ticks: { color: '#64748b', callback: v => '₹' + (v/100000).toFixed(0) + 'L' }, grid: { color: '#334155' } },
+                                  x: { ticks: { color: '#64748b' }, grid: { color: '#334155' } } } }
                 });
             }
         }
 
-        // SWP Calculator
+        // ─── SWP ──────────────────────────────────────────────────────────────────
         function calculateSWP() {
-            const initial = parseFloat(document.getElementById('swp-amount').value);
-            const monthlyWithdrawal = parseFloat(document.getElementById('swp-withdrawal').value);
-            const rate = parseFloat(document.getElementById('swp-rate').value);
-            const years = parseFloat(document.getElementById('swp-years').value);
-
-            if (initial && monthlyWithdrawal && rate !== undefined && years) {
-                const monthlyRate = rate / 12 / 100;
-
-                let balance = initial;
-                let totalWithdrawn = 0;
-                const tableBody = document.getElementById('swp-table');
-                tableBody.innerHTML = '';
-
+            const initial  = parseFloat(document.getElementById('swp-amount').value);
+            const monthly  = parseFloat(document.getElementById('swp-withdrawal').value);
+            const rate     = parseFloat(document.getElementById('swp-rate').value);
+            const years    = parseFloat(document.getElementById('swp-years').value);
+            if (initial && monthly && rate !== undefined && years) {
+                const mr = rate / 12 / 100;
+                let balance = initial, totalWithdrawn = 0;
+                const tbody = document.getElementById('swp-table');
+                tbody.innerHTML = '';
                 for (let year = 1; year <= years; year++) {
-                    for (let month = 1; month <= 12; month++) {
-                        balance = balance * (1 + monthlyRate) - monthlyWithdrawal;
-                        totalWithdrawn += monthlyWithdrawal;
-                        if (balance <= 0) {
-                            balance = 0;
-                            break;
-                        }
+                    for (let m = 1; m <= 12; m++) {
+                        balance = balance * (1 + mr) - monthly;
+                        totalWithdrawn += monthly;
+                        if (balance <= 0) { balance = 0; break; }
                     }
-
-                    const row = document.createElement('tr');
-                    row.className = 'hover:bg-slate-800/50 transition';
-                    row.innerHTML = `
-                        <td class="px-3 py-2 font-medium text-slate-300">Year ${year}</td>
-                        <td class="px-3 py-2 text-right text-rose-400">-${formatCurrency(monthlyWithdrawal * 12)}</td>
-                        <td class="px-3 py-2 text-right font-semibold text-emerald-400">${formatCurrency(balance)}</td>
-                    `;
-                    tableBody.appendChild(row);
-
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-slate-800/50 transition';
+                    tr.innerHTML = `<td class="px-3 py-2 font-medium text-slate-300">Year ${year}</td>
+                        <td class="px-3 py-2 text-right text-rose-400">-${formatCurrency(monthly * 12)}</td>
+                        <td class="px-3 py-2 text-right font-semibold text-emerald-400">${formatCurrency(balance)}</td>`;
+                    tbody.appendChild(tr);
                     if (balance <= 0) break;
                 }
-
-                const totalReturns = totalWithdrawn + balance - initial;
-                const sustainable = balance > 0 ? 'Sustainable' : 'Depleted';
-
                 document.getElementById('swp-total-withdrawn').textContent = formatCurrency(totalWithdrawn);
-                document.getElementById('swp-remaining').textContent = formatCurrency(balance);
-                document.getElementById('swp-earned').textContent = formatCurrency(totalReturns);
-                document.getElementById('swp-status').textContent = sustainable;
+                document.getElementById('swp-remaining').textContent       = formatCurrency(balance);
+                document.getElementById('swp-earned').textContent          = formatCurrency(totalWithdrawn + balance - initial);
+                document.getElementById('swp-status').textContent          = balance > 0 ? 'Sustainable' : 'Depleted';
                 document.getElementById('swp-result').classList.remove('hidden');
                 document.getElementById('swp-table-card').classList.remove('hidden');
             }
         }
 
-        // Position Sizing Calculator
-        // PPF Calculator
+        // ─── PPF ──────────────────────────────────────────────────────────────────
         function calculatePPF() {
             const amount = parseFloat(document.getElementById('ppf-amount').value);
-            const rate = 7.1 / 100;
-            const years = 15;
-
             if (amount) {
-                // Formula: F = P [({(1 + i) ^ n} - 1) / i]
-                // For annual installments at start of period
-                const futureValue = amount * ((Math.pow(1 + rate, years) - 1) / rate) * (1 + rate);
-                const totalInvested = amount * years;
-                const totalInterest = futureValue - totalInvested;
-
-                document.getElementById('ppf-total').textContent = formatCurrency(futureValue);
-                document.getElementById('ppf-invested').textContent = formatCurrency(totalInvested);
-                document.getElementById('ppf-interest').textContent = formatCurrency(totalInterest);
+                const r = 7.1 / 100, years = 15;
+                const fv = amount * ((Math.pow(1 + r, years) - 1) / r) * (1 + r);
+                document.getElementById('ppf-total').textContent    = formatCurrency(fv);
+                document.getElementById('ppf-invested').textContent = formatCurrency(amount * years);
+                document.getElementById('ppf-interest').textContent = formatCurrency(fv - amount * years);
                 document.getElementById('ppf-result').classList.remove('hidden');
             }
         }
 
-        // SSY Calculator
+        // ─── SSY ──────────────────────────────────────────────────────────────────
         function calculateSSY() {
             const amount = parseFloat(document.getElementById('ssy-amount').value);
-            const rate = 8.2 / 100;
-            const contributionYears = 15;
-            const maturityYears = 21;
-
             if (amount) {
-                // First 15 years investment
-                let corpus = amount * ((Math.pow(1 + rate, contributionYears) - 1) / rate) * (1 + rate);
-
-                // Next 6 years only interest
-                for (let i = 0; i < (maturityYears - contributionYears); i++) {
-                    corpus = corpus * (1 + rate);
-                }
-
-                const totalInvested = amount * contributionYears;
-                const totalInterest = corpus - totalInvested;
-
-                document.getElementById('ssy-total').textContent = formatCurrency(corpus);
-                document.getElementById('ssy-invested').textContent = formatCurrency(totalInvested);
-                document.getElementById('ssy-interest').textContent = formatCurrency(totalInterest);
+                const r = 8.2 / 100;
+                let corpus = amount * ((Math.pow(1 + r, 15) - 1) / r) * (1 + r);
+                for (let i = 0; i < 6; i++) corpus *= (1 + r);
+                document.getElementById('ssy-total').textContent    = formatCurrency(corpus);
+                document.getElementById('ssy-invested').textContent = formatCurrency(amount * 15);
+                document.getElementById('ssy-interest').textContent = formatCurrency(corpus - amount * 15);
                 document.getElementById('ssy-result').classList.remove('hidden');
             }
         }
 
-        // KVP Calculator
+        // ─── KVP ──────────────────────────────────────────────────────────────────
         function calculateKVP() {
             const amount = parseFloat(document.getElementById('kvp-amount').value);
-            const rate = 7.5; // p.a.
-
             if (amount) {
-                const maturityValue = amount * 2;
-                const interest = amount;
-
-                document.getElementById('kvp-total').textContent = formatCurrency(maturityValue);
+                document.getElementById('kvp-total').textContent    = formatCurrency(amount * 2);
                 document.getElementById('kvp-invested').textContent = formatCurrency(amount);
-                document.getElementById('kvp-interest').textContent = formatCurrency(interest);
+                document.getElementById('kvp-interest').textContent = formatCurrency(amount);
                 document.getElementById('kvp-result').classList.remove('hidden');
             }
         }
 
+        // ─── Position Sizing ──────────────────────────────────────────────────────
         function calculatePosition() {
             const account = parseFloat(document.getElementById('pos-account').value);
-            const riskPercent = parseFloat(document.getElementById('pos-risk').value);
-            const entry = parseFloat(document.getElementById('pos-entry').value);
-            const stop = parseFloat(document.getElementById('pos-stop').value);
-            const target = parseFloat(document.getElementById('pos-target').value);
-
-            if (account && riskPercent && entry && stop) {
-                const riskAmount = account * (riskPercent / 100);
-                const riskPerShare = Math.abs(entry - stop);
-                const shares = Math.floor(riskAmount / riskPerShare);
-                const investment = shares * entry;
-                const stopPercent = (riskPerShare / entry) * 100;
-                const allocation = (investment / account) * 100;
-
-                let riskReward = '1:0';
-                if (target) {
-                    const reward = Math.abs(target - entry);
-                    const rr = (reward / riskPerShare).toFixed(1);
-                    riskReward = '1:' + rr;
-                }
-
-                document.getElementById('pos-size').textContent = shares.toLocaleString() + ' shares';
-                document.getElementById('pos-investment').textContent = formatCurrency(investment);
-                document.getElementById('pos-risk-amount').textContent = formatCurrency(riskAmount);
-                document.getElementById('pos-stop-pct').textContent = stopPercent.toFixed(2) + '%';
-                document.getElementById('pos-rr').textContent = riskReward;
-                document.getElementById('pos-allocation').textContent = allocation.toFixed(1) + '%';
+            const risk    = parseFloat(document.getElementById('pos-risk').value);
+            const entry   = parseFloat(document.getElementById('pos-entry').value);
+            const stop    = parseFloat(document.getElementById('pos-stop').value);
+            const target  = parseFloat(document.getElementById('pos-target').value);
+            if (account && risk && entry && stop) {
+                const riskAmt  = account * (risk / 100);
+                const rps      = Math.abs(entry - stop);
+                const shares   = Math.floor(riskAmt / rps);
+                const invest   = shares * entry;
+                document.getElementById('pos-size').textContent       = shares.toLocaleString() + ' shares';
+                document.getElementById('pos-investment').textContent = formatCurrency(invest);
+                document.getElementById('pos-risk-amount').textContent= formatCurrency(riskAmt);
+                document.getElementById('pos-stop-pct').textContent   = (rps / entry * 100).toFixed(2) + '%';
+                document.getElementById('pos-rr').textContent         = target ? '1:' + (Math.abs(target - entry) / rps).toFixed(1) : '1:0';
+                document.getElementById('pos-allocation').textContent = (invest / account * 100).toFixed(1) + '%';
                 document.getElementById('pos-result').classList.remove('hidden');
             }
         }
 
-        // Initialize
+        // ══════════════════════════════════════════════════════════════
+        // 12. FD CALCULATOR
+        // ══════════════════════════════════════════════════════════════
+        function calculateFD() {
+            const P = parseFloat(document.getElementById('fd-principal').value);
+            const r = parseFloat(document.getElementById('fd-rate').value) / 100;
+            const tenureRaw = parseFloat(document.getElementById('fd-tenure').value);
+            const unit = document.getElementById('fd-tenure-unit').value;
+            const n = parseInt(document.getElementById('fd-compound').value);
+            if (!P || !r || !tenureRaw) { alert('Please fill all fields.'); return; }
+            const t = unit === 'months' ? tenureRaw / 12 : tenureRaw;
+            const A = P * Math.pow(1 + r / n, n * t);
+            const interest = A - P;
+            const eay = (Math.pow(1 + r / n, n) - 1) * 100;
+            const absReturn = interest / P * 100;
+
+            document.getElementById('fd-maturity').textContent     = formatCurrency(A);
+            document.getElementById('fd-principal-out').textContent= formatCurrency(P);
+            document.getElementById('fd-interest-out').textContent  = formatCurrency(interest);
+            document.getElementById('fd-yield').textContent         = fmtPct(eay);
+            document.getElementById('fd-abs-return').textContent    = fmtPct(absReturn);
+            document.getElementById('fd-result').classList.remove('hidden');
+
+            const tbody = document.getElementById('fd-table-body');
+            tbody.innerHTML = '';
+            const totalYears = Math.ceil(t);
+            let cumInterest = 0;
+            for (let y = 1; y <= totalYears; y++) {
+                const tEnd  = Math.min(y, t);
+                const tStart= Math.min(y - 1, t);
+                const bEnd  = P * Math.pow(1 + r / n, n * tEnd);
+                const bStart= P * Math.pow(1 + r / n, n * tStart);
+                const pInt  = bEnd - bStart;
+                cumInterest += pInt;
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>Year ${y}</td><td>${formatCurrency(pInt)}</td><td>${formatCurrency(cumInterest)}</td><td>${formatCurrency(bEnd)}</td>`;
+                tbody.appendChild(tr);
+            }
+        }
+
+        // ══════════════════════════════════════════════════════════════
+        // 13. RD CALCULATOR
+        // ══════════════════════════════════════════════════════════════
+        function calculateRD() {
+            const R = parseFloat(document.getElementById('rd-monthly').value);
+            const annualRate = parseFloat(document.getElementById('rd-rate').value);
+            const months = parseInt(document.getElementById('rd-tenure').value);
+            if (!R || !annualRate || !months) { alert('Please fill all fields.'); return; }
+
+            // Indian RD: quarterly compounding
+            // Each monthly instalment m (1-indexed) compounds for remaining quarters
+            const qRate = annualRate / 4 / 100;
+            let maturity = 0;
+            for (let m = 1; m <= months; m++) {
+                const quarters = (months - m + 1) / 3;
+                maturity += R * Math.pow(1 + qRate, quarters);
+            }
+
+            const totalDeposited = R * months;
+            const totalInterest  = maturity - totalDeposited;
+            const wealthGain     = totalInterest / totalDeposited * 100;
+
+            document.getElementById('rd-maturity').textContent       = formatCurrency(maturity);
+            document.getElementById('rd-deposited').textContent      = formatCurrency(totalDeposited);
+            document.getElementById('rd-interest').textContent       = formatCurrency(totalInterest);
+            document.getElementById('rd-gain').textContent           = fmtPct(wealthGain);
+            document.getElementById('rd-monthly-growth').textContent = formatCurrency(totalInterest / months);
+            document.getElementById('rd-result').classList.remove('hidden');
+
+            // Quarterly breakup
+            const tbody = document.getElementById('rd-table-body');
+            tbody.innerHTML = '';
+            const totalQ = Math.ceil(months / 3);
+            let runningDeposited = 0, cumInterest = 0;
+            for (let q = 1; q <= totalQ; q++) {
+                const monthsThisQ = Math.min(3, months - (q - 1) * 3);
+                runningDeposited += R * monthsThisQ;
+                const monthsElapsed = Math.min(q * 3, months);
+                let partialMat = 0;
+                for (let m = 1; m <= monthsElapsed; m++) {
+                    partialMat += R * Math.pow(1 + qRate, (monthsElapsed - m + 1) / 3);
+                }
+                const qInt = partialMat - runningDeposited;
+                const periodInt = qInt - cumInterest;
+                cumInterest = qInt;
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>Q${q} (M${(q-1)*3+1}–${Math.min(q*3,months)})</td><td>${formatCurrency(runningDeposited)}</td><td>${formatCurrency(periodInt)}</td><td>${formatCurrency(partialMat)}</td>`;
+                tbody.appendChild(tr);
+            }
+        }
+
+        // ══════════════════════════════════════════════════════════════
+        // 14. EMI CALCULATOR
+        // ══════════════════════════════════════════════════════════════
+        function setEmiDefaults() {
+            const defaults = {
+                home:     { rate: 8.5, tenure: 20, amount: 3000000 },
+                car:      { rate: 9.0, tenure: 5,  amount: 800000  },
+                personal: { rate: 14,  tenure: 3,  amount: 300000  },
+                custom:   { rate: '',  tenure: '', amount: ''       }
+            };
+            const d = defaults[document.getElementById('emi-type').value];
+            if (d.amount !== '') {
+                document.getElementById('emi-principal').value = d.amount;
+                document.getElementById('emi-rate').value      = d.rate;
+                document.getElementById('emi-tenure').value    = d.tenure;
+            }
+        }
+
+        function calculateEMI() {
+            const P     = parseFloat(document.getElementById('emi-principal').value);
+            const annual= parseFloat(document.getElementById('emi-rate').value);
+            const years = parseInt(document.getElementById('emi-tenure').value);
+            if (!P || !annual || !years) { alert('Please fill all fields.'); return; }
+            const r = annual / 12 / 100, n = years * 12;
+            const emi = P * r * Math.pow(1 + r, n) / (Math.pow(1 + r, n) - 1);
+            const total = emi * n, interest = total - P;
+            const intPct = interest / total * 100, prPct = 100 - intPct;
+
+            document.getElementById('emi-monthly').textContent      = formatCurrency(emi);
+            document.getElementById('emi-principal-out').textContent = formatCurrency(P);
+            document.getElementById('emi-interest-out').textContent  = formatCurrency(interest);
+            document.getElementById('emi-total-out').textContent     = formatCurrency(total);
+            document.getElementById('emi-interest-pct').textContent  = fmtPct(intPct);
+            document.getElementById('emi-bar-p').style.width = prPct + '%';
+            document.getElementById('emi-bar-i').style.width = intPct + '%';
+            document.getElementById('emi-result').classList.remove('hidden');
+
+            const tbody = document.getElementById('emi-table-body');
+            tbody.innerHTML = '';
+            let balance = P;
+            for (let y = 1; y <= years; y++) {
+                let yPrincipal = 0, yInterest = 0;
+                for (let m = 0; m < 12 && balance > 0; m++) {
+                    const intPart = balance * r;
+                    const prPart  = Math.min(emi - intPart, balance);
+                    yInterest  += intPart; yPrincipal += prPart;
+                    balance -= prPart;
+                    if (balance < 1) balance = 0;
+                }
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>Year ${y}</td><td>${formatCurrency(yPrincipal)}</td><td>${formatCurrency(yInterest)}</td><td>${formatCurrency(Math.max(balance,0))}</td>`;
+                tbody.appendChild(tr);
+            }
+        }
+
+        // ══════════════════════════════════════════════════════════════
+        // 15. STEP-UP SIP CALCULATOR
+        // ══════════════════════════════════════════════════════════════
+        function calculateStepUpSIP() {
+            const initSIP   = parseFloat(document.getElementById('su-initial').value);
+            const stepupPct = parseFloat(document.getElementById('su-stepup').value) / 100;
+            const retRate   = parseFloat(document.getElementById('su-return').value) / 100;
+            const years     = parseInt(document.getElementById('su-years').value);
+            if (!initSIP || isNaN(stepupPct) || !retRate || !years) { alert('Please fill all fields.'); return; }
+
+            const mr = retRate / 12;
+            // Regular SIP corpus for comparison
+            const n = years * 12;
+            const regularCorpus = initSIP * (Math.pow(1 + mr, n) - 1) / mr * (1 + mr);
+
+            const tbody = document.getElementById('su-table-body');
+            tbody.innerHTML = '';
+            let runningCorpus = 0, runningInvested = 0, currentSIP = initSIP;
+
+            for (let y = 1; y <= years; y++) {
+                if (y > 1) currentSIP = currentSIP * (1 + stepupPct);
+                for (let m = 0; m < 12; m++) {
+                    runningCorpus = (runningCorpus + currentSIP) * (1 + mr);
+                    runningInvested += currentSIP;
+                }
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>Year ${y}</td><td>${formatCurrency(currentSIP)}</td><td>${formatCurrency(runningInvested)}</td><td>${formatCurrency(runningCorpus)}</td>`;
+                tbody.appendChild(tr);
+            }
+
+            const totalReturns = runningCorpus - runningInvested;
+            const finalSIP     = initSIP * Math.pow(1 + stepupPct, years - 1);
+
+            document.getElementById('su-corpus').textContent         = formatCurrency(runningCorpus);
+            document.getElementById('su-invested').textContent       = formatCurrency(runningInvested);
+            document.getElementById('su-returns').textContent        = formatCurrency(totalReturns);
+            document.getElementById('su-gain').textContent           = fmtPct(totalReturns / runningInvested * 100);
+            document.getElementById('su-final-sip').textContent      = formatCurrency(finalSIP);
+            document.getElementById('su-extra').textContent          = formatCurrency(runningCorpus - regularCorpus) + ' more';
+            document.getElementById('su-regular-corpus').textContent = formatCurrency(regularCorpus);
+            document.getElementById('su-result').classList.remove('hidden');
+        }
+
+        // ══════════════════════════════════════════════════════════════
+        // 16. NSC CALCULATOR
+        // ══════════════════════════════════════════════════════════════
+        function calculateNSC() {
+            const P = parseFloat(document.getElementById('nsc-principal').value);
+            if (!P) { alert('Please enter investment amount.'); return; }
+            const rate = 0.077; // 7.7% current
+            let balance = P, cumInterest = 0;
+            const tbody = document.getElementById('nsc-table-body');
+            tbody.innerHTML = '';
+            for (let y = 1; y <= 5; y++) {
+                const interest = balance * rate;
+                cumInterest += interest;
+                balance += interest;
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>Year ${y}${y < 5 ? ' (80C)' : ' (taxable)'}</td><td>${formatCurrency(interest)}</td><td>${formatCurrency(cumInterest)}</td><td>${formatCurrency(balance)}</td>`;
+                tbody.appendChild(tr);
+            }
+            document.getElementById('nsc-maturity').textContent     = formatCurrency(balance);
+            document.getElementById('nsc-principal-out').textContent = formatCurrency(P);
+            document.getElementById('nsc-interest').textContent      = formatCurrency(balance - P);
+            document.getElementById('nsc-abs').textContent           = fmtPct((balance - P) / P * 100);
+            document.getElementById('nsc-result').classList.remove('hidden');
+        }
+
+        // ══════════════════════════════════════════════════════════════
+        // 17. INCOME TAX CALCULATOR
+        // ══════════════════════════════════════════════════════════════
+        let taxRegimeMode = 'both';
+
+        function setTaxRegime(r) {
+            taxRegimeMode = r;
+            ['both','new','old'].forEach(x => {
+                document.getElementById('tax-btn-' + x).classList.remove('active');
+            });
+            document.getElementById('tax-btn-' + r).classList.add('active');
+            document.getElementById('tax-old-deductions').style.display = (r === 'new') ? 'none' : 'block';
+        }
+
+        // New regime slabs FY 2024-25 (AY 2025-26)
+        const NEW_SLABS = [
+            { min: 0,       max: 300000,   rate: 0    },
+            { min: 300000,  max: 700000,   rate: 0.05 },
+            { min: 700000,  max: 1000000,  rate: 0.10 },
+            { min: 1000000, max: 1200000,  rate: 0.15 },
+            { min: 1200000, max: 1500000,  rate: 0.20 },
+            { min: 1500000, max: Infinity, rate: 0.30 }
+        ];
+        const OLD_BELOW60 = [
+            { min: 0,       max: 250000,   rate: 0    },
+            { min: 250000,  max: 500000,   rate: 0.05 },
+            { min: 500000,  max: 1000000,  rate: 0.20 },
+            { min: 1000000, max: Infinity, rate: 0.30 }
+        ];
+        const OLD_SENIOR = [
+            { min: 0,       max: 300000,   rate: 0    },
+            { min: 300000,  max: 500000,   rate: 0.05 },
+            { min: 500000,  max: 1000000,  rate: 0.20 },
+            { min: 1000000, max: Infinity, rate: 0.30 }
+        ];
+        const OLD_SUPER = [
+            { min: 0,       max: 500000,   rate: 0    },
+            { min: 500000,  max: 1000000,  rate: 0.20 },
+            { min: 1000000, max: Infinity, rate: 0.30 }
+        ];
+
+        function computeTax(taxable, slabs) {
+            let tax = 0;
+            const breakdown = [];
+            for (const s of slabs) {
+                if (taxable <= s.min) break;
+                const chunk = Math.min(taxable, s.max) - s.min;
+                const slabTax = chunk * s.rate;
+                tax += slabTax;
+                if (slabTax > 0 || s.rate === 0) {
+                    const label = s.max === Infinity
+                        ? 'Above ₹' + (s.min / 100000).toFixed(0) + 'L'
+                        : '₹' + fmtL(s.min) + ' – ₹' + fmtL(s.max);
+                    breakdown.push({ label, rate: (s.rate * 100) + '%', tax: slabTax });
+                }
+            }
+            return { tax, breakdown };
+        }
+
+        function fmtL(n) {
+            if (n >= 100000) return (n / 100000).toFixed(n % 100000 === 0 ? 0 : 1) + 'L';
+            return (n / 1000).toFixed(0) + 'K';
+        }
+
+        function withCess(tax, income) {
+            let surcharge = 0;
+            if      (income > 50000000)  surcharge = tax * 0.37;
+            else if (income > 20000000)  surcharge = tax * 0.25;
+            else if (income > 10000000)  surcharge = tax * 0.15;
+            else if (income > 5000000)   surcharge = tax * 0.10;
+            const cess = (tax + surcharge) * 0.04;
+            return { total: tax + surcharge + cess, surcharge, cess };
+        }
+
+        function calculateIncomeTax() {
+            const gross  = parseFloat(document.getElementById('tax-income').value);
+            const age    = document.getElementById('tax-age').value;
+            if (!gross) { alert('Please enter gross income.'); return; }
+
+            const d80c   = Math.min(parseFloat(document.getElementById('tax-80c').value)   || 0, 150000);
+            const d80d   = parseFloat(document.getElementById('tax-80d').value)   || 0;
+            const dHRA   = parseFloat(document.getElementById('tax-hra').value)   || 0;
+            const dOther = parseFloat(document.getElementById('tax-other').value) || 0;
+            const stdOld = 50000;
+            const totalOldDeductions = stdOld + d80c + d80d + dHRA + dOther;
+
+            const stdNew = 75000; // FY 2024-25 standard deduction for new regime
+
+            const taxableOld = Math.max(gross - totalOldDeductions, 0);
+            const taxableNew = Math.max(gross - stdNew, 0);
+
+            const oldSlabs = age === 'above80' ? OLD_SUPER : age === '60to80' ? OLD_SENIOR : OLD_BELOW60;
+            const oldComp  = computeTax(taxableOld, oldSlabs);
+            const newComp  = computeTax(taxableNew, NEW_SLABS);
+
+            // Section 87A rebate
+            let oldTax = oldComp.tax <= 12500  && taxableOld <= 500000 ? 0 : oldComp.tax;
+            let newTax = newComp.tax <= 25000  && taxableNew <= 700000 ? 0 : newComp.tax;
+
+            const oldFinal = withCess(oldTax, gross);
+            const newFinal = withCess(newTax, gross);
+
+            // Which to use for in-hand calculation
+            const showNew = taxRegimeMode !== 'old';
+            const showOld = taxRegimeMode !== 'new';
+            const primaryTax = (showNew && !showOld) ? newFinal.total
+                             : (showOld && !showNew) ? oldFinal.total
+                             : Math.min(oldFinal.total, newFinal.total);
+
+            document.getElementById('tax-gross-out').textContent = formatCurrency(gross);
+            document.getElementById('tax-eff-rate').textContent  = fmtPct(primaryTax / gross * 100);
+            document.getElementById('tax-inhand').textContent    = formatCurrency((gross - primaryTax) / 12);
+            document.getElementById('tax-cess').textContent      = formatCurrency(
+                showNew && !showOld ? newFinal.cess + newFinal.surcharge
+              : showOld && !showNew ? oldFinal.cess + oldFinal.surcharge
+              : (oldFinal.total < newFinal.total ? oldFinal : newFinal).cess + (oldFinal.total < newFinal.total ? oldFinal : newFinal).surcharge
+            );
+
+            // Comparison cards
+            const cardsEl = document.getElementById('tax-compare-cards');
+            cardsEl.innerHTML = '';
+            const oldBetter = oldFinal.total <= newFinal.total;
+
+            if (showOld) {
+                const c = document.createElement('div');
+                c.className = 'tax-regime-card' + (oldBetter ? ' winner' : '');
+                c.innerHTML = `<div class="rc-label">Old Regime</div>
+                    <div class="rc-amount">${formatCurrency(oldFinal.total)}</div>
+                    <div style="font-size:0.72rem;color:#94a3b8;margin-top:4px">Taxable: ${formatCurrency(taxableOld)}</div>
+                    ${oldBetter ? '<div class="rc-badge">✓ SAVES MORE</div>' : ''}`;
+                cardsEl.appendChild(c);
+            }
+            if (showNew) {
+                const c = document.createElement('div');
+                c.className = 'tax-regime-card' + (!oldBetter ? ' winner' : '');
+                c.innerHTML = `<div class="rc-label">New Regime</div>
+                    <div class="rc-amount">${formatCurrency(newFinal.total)}</div>
+                    <div style="font-size:0.72rem;color:#94a3b8;margin-top:4px">Taxable: ${formatCurrency(taxableNew)}</div>
+                    ${!oldBetter ? '<div class="rc-badge">✓ SAVES MORE</div>' : ''}`;
+                cardsEl.appendChild(c);
+            }
+
+            // Slab breakdown for the better/selected regime
+            const primaryBreakdown = (!showNew && showOld) ? oldComp.breakdown
+                                   : (!showOld && showNew) ? newComp.breakdown
+                                   : (oldBetter ? oldComp.breakdown : newComp.breakdown);
+            const regimeName = (!showNew && showOld) ? 'Old' : (!showOld && showNew) ? 'New' : (oldBetter ? 'Old' : 'New');
+            document.getElementById('tax-slab-heading').textContent = regimeName + ' Regime — Slab Breakdown';
+
+            const slabBody = document.getElementById('tax-slab-body');
+            slabBody.innerHTML = '';
+            primaryBreakdown.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${row.label}</td><td>${row.rate}</td><td>${formatCurrency(row.tax)}</td>`;
+                slabBody.appendChild(tr);
+            });
+            const totalTr = document.createElement('tr');
+            totalTr.innerHTML = `<td><strong>Total (incl. cess & surcharge)</strong></td><td>–</td><td>${formatCurrency(primaryTax)}</td>`;
+            slabBody.appendChild(totalTr);
+
+            document.getElementById('tax-result').classList.remove('hidden');
+        }
+
+        // ─── Initialise ───────────────────────────────────────────────────────────
+        setEmiDefaults();
         showCalculator('cagr');
 
-        // Check if running as installed PWA
         if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
             document.getElementById('installBtn').classList.add('hidden');
             document.getElementById('mobileInstallBanner').classList.add('hidden');
         }
     </script>
 </body>
-
 </html>
